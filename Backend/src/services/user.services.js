@@ -1,9 +1,9 @@
-const loginService = () => {
-  return "Yes I am krishi";
+const demoService = () => {
+  return "Yes This is demo service for checking purpose";
 };
 
 const userServices = {
-  loginService,
+  demoService,
 };
 
 export default userServices;
