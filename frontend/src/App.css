@@ -1,5 +1,7 @@
-
-
+/* 
+body {
+  overflow-y: hidden;
+}
 .App {
   text-align: center;
 }
@@ -38,3 +40,4 @@
     transform: rotate(360deg);
   }
 }
+ */
