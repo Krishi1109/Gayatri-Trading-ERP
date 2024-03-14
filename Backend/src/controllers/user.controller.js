@@ -9,10 +9,6 @@ import User from "../models/user.model";
 const demo = (req, res, next) => {
   try {
     const response = userServices.demoService();
-
-    if (response.length < 5) {
-      return next(new ErrorHandler("Error has occored", 420));
-    }
     res.status(StatusCodes.OK).send({
       success: true,
       message: "This is demmo API!!",
