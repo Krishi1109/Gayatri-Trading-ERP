@@ -1,5 +1,19 @@
 const demoService = () => {
-  return "Yes This is demo service for checking purpose";
+  const demo = [
+    {
+      name: "krishi",
+      number: "741236985",
+    },
+    {
+      name: "Darshit",
+      number: "741236985",
+    },
+    {
+      name: "Hello",
+      number: "741236985",
+    },
+  ];
+  return demo;
 };
 
 const userServices = {

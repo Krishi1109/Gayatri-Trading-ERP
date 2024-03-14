@@ -1,11 +1,16 @@
 import React from "react";
 
-const LoginScreen = () => {
-  return <div >
-      <div className="flex justify-center items-center ">
-      <form className="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
+const LoginForm = () => {
+  return (
+    <>
+    <p>Login to access your account</p>
+    <div className="flex justify-center items-center">
+      <form className="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4 dark:bg-gray-800 dark:text-white">
         <div className="mb-4">
-          <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="username">
+          <label
+            className="block text-gray-700 text-sm font-bold mb-2"
+            htmlFor="username"
+          >
             Username
           </label>
           <input
@@ -16,7 +21,10 @@ const LoginScreen = () => {
           />
         </div>
         <div className="mb-6">
-          <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="password">
+          <label
+            className="block text-gray-700 text-sm font-bold mb-2"
+            htmlFor="password"
+          >
             Password
           </label>
           <input
@@ -28,7 +36,7 @@ const LoginScreen = () => {
         </div>
         <div className="flex items-center justify-between">
           <button
-            className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+            className="bg-cyan-500 hover:bg-cyan-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
             type="button"
           >
             Sign In
@@ -36,7 +44,8 @@ const LoginScreen = () => {
         </div>
       </form>
     </div>
-  </div>;
+</>
+  );
 };
 
-export default LoginScreen;
+export default LoginForm;
