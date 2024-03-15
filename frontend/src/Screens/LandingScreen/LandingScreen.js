@@ -1,8 +1,19 @@
-import React from "react";
+import React, { useEffect } from "react";
 import LoginForm from "../../components/LoginForm";
 import "./LandingScreen.css";
+import { useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
 
 const LandingScreen = () => {
+  const navigate = useNavigate( )
+  const { isAuth } = useSelector((state) => state.auth);
+
+  useEffect(() => {
+    if (isAuth === true) {
+      navigate("/dashboard");
+    }
+  }, [isAuth]);
+
   return (
     <div className="landing-screen">
       <div className="shapes-container">
@@ -18,7 +29,7 @@ const LandingScreen = () => {
       </div>
       <div className="content">
         <div className="brand-container">
-          <h1 className="brand-name">Gayatri Trading</h1>
+          <h1 className="brand-name font-bold">Gayatri Trading</h1>
         </div>
         <div className="box-container">
           <div className="box">
