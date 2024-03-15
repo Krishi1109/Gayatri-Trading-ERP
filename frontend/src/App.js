@@ -5,6 +5,7 @@ import Authenticate from "./components/Authentication/Authenticate";
 import Footer from "./components/Footer";
 import Navbar from "./components/Navbar";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
+import StockManagement from "./Screens/StockManagementScreen/StockManagement";
 
 const App = () => {
   return (
@@ -13,8 +14,8 @@ const App = () => {
       <Routes>
         <Route path="/" element={<LandingScreen />} />
         <Route element={<Authenticate />}>
-          <Route index path="/dashboard" element={<DashboardScreen />} />
-          <Route path="/demo" element={<DashboardScreen />} />
+          <Route path="/dashboard" element={<DashboardScreen />} />
+          <Route path="/stock" element={<StockManagement />} />
         </Route>
       </Routes>
       <Footer />

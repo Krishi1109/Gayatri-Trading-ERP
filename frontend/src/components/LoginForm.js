@@ -1,22 +1,30 @@
-import React, { useState } from "react";
+import React from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { userLogin } from "../store/slices/userSlice";
 import { useNavigate } from "react-router-dom";
+import { userLogin } from "../apis/users";
+import { useFormik} from "formik";
+import * as Yup from "yup";
 
 const LoginForm = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate()
-
   const {loginApistatus} = useSelector((state) => state.auth)
 
-  console.log("loginApistatus => ", loginApistatus)
-  const [username, setUsername] = useState("");
-  const [password, setPassword] = useState("");
-
-  const handleLogin = () => {
-    dispatch(userLogin({ username, password }));
-    navigate('/dashboard')
-  };
+  const { values, handleSubmit, handleChange, handleBlur, errors, touched } = useFormik({
+    initialValues: {
+      username: "",
+      password: "",
+    },
+    validationSchema: Yup.object().shape({
+      username: Yup.string().required("username is required."),
+      password: Yup.string().required("password is required."),
+    }),
+    onSubmit: (values) => {
+      console.log("values =>", values)
+      dispatch(userLogin(values));
+      navigate('/dashboard')
+    }
+  })
 
   return (
     <>
@@ -31,13 +39,16 @@ const LoginForm = () => {
               Username
             </label>
             <input
+              name="username"
               className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
               id="username"
               type="text"
               placeholder="Username"
-              value={username}
-              onChange={(e) => setUsername(e.target.value)}
+              value={values.username}
+              onChange={handleChange}
+              onBlur={handleBlur}
             />
+            {errors.username && touched.username ? <span style={{ color: "red" }}>{errors.username}</span> : <></>}
           </div>
           <div className="mb-6">
             <label
@@ -47,19 +58,22 @@ const LoginForm = () => {
               Password
             </label>
             <input
+              name="password"
               className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 mb-3 leading-tight focus:outline-none focus:shadow-outline"
               id="password"
               type="password"
               placeholder="Password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
+              value={values.password}
+              onChange={handleChange}
+              onBlur={handleBlur}
             />
+            {errors.password && touched.password ? <span style={{ color: "red" }}>{errors.password}</span> : <></>}
           </div>
           <div className="flex items-center justify-between">
           <button
               className="bg-cyan-500 hover:bg-cyan-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
               type="button"
-              onClick={handleLogin}
+              onClick={() => handleSubmit()}
               disabled={loginApistatus === 'pending'} // Disable the button when the API call is pending
             >
               {loginApistatus === 'pending' ? "Signing in..." : "Sign In"} 
