@@ -1,7 +1,8 @@
 import { combineReducers, configureStore } from "@reduxjs/toolkit";
-import demoSlice from "./slices/userSlice";
+import demoSlice from "./slices/demoSlice";
 import { persistStore, persistReducer } from "redux-persist";
 import storage from "redux-persist/lib/storage";
+import authSlice from "./slices/userSlice";
 
 const persistConfig = {
   key: "root",
@@ -16,7 +17,8 @@ const demoPersistConfig = {
 };
 
 const rootReducer = combineReducers({
-  krishi: persistReducer(demoPersistConfig, demoSlice.reducer),
+  demo: persistReducer(demoPersistConfig, demoSlice.reducer),
+  auth: authSlice.reducer,
 });
 
 const persistedReducer = persistReducer(persistConfig, rootReducer);
