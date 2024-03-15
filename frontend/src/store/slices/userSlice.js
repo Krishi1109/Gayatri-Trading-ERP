@@ -1,44 +1,56 @@
-import { createAsyncThunk, createSlice, } from "@reduxjs/toolkit";
+import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import axios from "axios";
 import { ApiStates, BASEURL } from "../../shared/constants";
 
 const initialState = {
-  demo: [],
-  isDemoApiStatus: ApiStates.idle,
+  isAuth: false,
+  userInfo: [],
+  loginApistatus: ApiStates.idle,
 };
 
-export const isDemo = createAsyncThunk("isDemo", async () => {
-  try {
-    const response = await axios.get(`${BASEURL}/api/user/demo`);
-    console.log(response);
-    return response.data;
-  } catch (error) {
-    console.log(error);
-    throw new Error(error);
+export const userLogin = createAsyncThunk(
+  "userLogin",
+  async ({ username, password }) => {
+    try {
+      const response = await axios.post(`${BASEURL}/api/user/login`, {
+        userName: username,
+        password,
+      });
+      return response.data;
+    } catch (error) {
+      console.log("hello");
+      console.log("error => ", error);
+      return { error: error };
+    }
   }
-});
+);
 
-export const isUserLoggedIn = createAsyncThunk('isUserLoggedIn', async () => {
-
-})
-
-const demoSlice = createSlice({
-  name: "hello",
+const authSlice = createSlice({
+  name: "auth",
   initialState,
-  reducers: {},
+  reducers: {
+    logout: () => initialState,
+  },
   extraReducers: (builder) => {
-    builder.addCase(isDemo.pending, (state) => {
-      console.log("first")
-      state.isDemoApiStatus = ApiStates.pending;
+    builder.addCase(userLogin.pending, (state) => {
+      state.loginApistatus = ApiStates.pending;
     });
-    builder.addCase(isDemo.fulfilled, (state, action) => {
-      state.isDemoApiStatus = ApiStates.success; 
-      state.demo = action.payload;
+    builder.addCase(userLogin.fulfilled, (state, action) => {
+      state.loginApistatus = ApiStates.success;
+      if (action.payload?.error) {
+        state.userInfo = [];
+        state.isAuth = false;
+      }
+      if (action.payload?.success) {
+        state.isAuth = true;
+        state.userInfo = action.payload;
+      }
     });
-    builder.addCase(isDemo.rejected, (state) => {
-      state.isDemoApiStatus = ApiStates.failed
-    })
+    builder.addCase(userLogin.rejected, (state) => {
+      state.loginApistatus = ApiStates.failed;
+    });
   },
 });
 
-export default demoSlice;
+export const { logout } = authSlice.actions;
+export default authSlice;
