@@ -1,6 +1,10 @@
 import mongoose from "mongoose";
 
-const stockSchema = new mongoose.Schema(
+const isPositive = (value) => {
+  return value >= 0;
+};
+
+const purchaseSchema = new mongoose.Schema(
   {
     brand: {
       type: String,
@@ -22,6 +26,14 @@ const stockSchema = new mongoose.Schema(
       type: Number,
       required: true,
     },
+    ordered_qty: {
+      type: Number,
+      default: 0,
+      validate: {
+        validator: isPositive,
+        message: "Please enter valid quantity!",
+      },
+    },
     orders: [
       {
         order_qty: {
@@ -35,6 +47,8 @@ const stockSchema = new mongoose.Schema(
     ],
     status: {
       type: String,
+      enum: ["ACTIVE", "INACTIVE", "COMPLETED"],
+      default: "INACTIVE",
     },
   },
   {
@@ -42,5 +56,5 @@ const stockSchema = new mongoose.Schema(
   }
 );
 
-const stock = new mongoose.model("Stock", stockSchema);
-export default stock;
+const purchase = new mongoose.model("Purchase", purchaseSchema);
+export default purchase;

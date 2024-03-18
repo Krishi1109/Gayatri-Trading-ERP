@@ -2,7 +2,7 @@ import Express from "express";
 import cors from "cors";
 
 import userRoute from "./routes/users.route";
-import stockRouter from "./routes/stocks"
+import purchaseRouter from "./routes/purchase"
 import brandRouter from "./routes/brand"
 import packageRouter from "./routes/package"
 
@@ -14,7 +14,7 @@ app.use(cors());
 // app.use(cookieParser());
 
 app.use("/api/user", userRoute);
-app.use("/api/stock", stockRouter);
+app.use("/api/purchase", purchaseRouter);
 app.use("/api/brand", brandRouter);
 app.use("/api/package", packageRouter);
 
