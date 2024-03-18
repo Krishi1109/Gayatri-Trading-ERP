@@ -4,6 +4,7 @@ import cors from "cors";
 import userRoute from "./routes/users.route";
 import stockRouter from "./routes/stocks"
 import brandRouter from "./routes/brand"
+import packageRouter from "./routes/package"
 
 const app = Express();
 
@@ -15,6 +16,6 @@ app.use(cors());
 app.use("/api/user", userRoute);
 app.use("/api/stock", stockRouter);
 app.use("/api/brand", brandRouter);
-
+app.use("/api/package", packageRouter);
 
 export default app;
