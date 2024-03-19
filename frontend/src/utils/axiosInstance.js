@@ -3,7 +3,7 @@ import axios from 'axios';
 // Create an Axios instance
 const axiosInstance = axios.create({
   baseURL: process.env.REACT_APP_BASE_URL,
-  timeout: 5000,
+  // timeout: 5000,
   headers: {
     'Content-Type': 'application/json', // Example headers
   },
@@ -12,6 +12,11 @@ const axiosInstance = axios.create({
 // Request interceptor
 axiosInstance.interceptors.request.use(
   (config) => {
+    const token = localStorage.getItem("token");
+    if (token) {
+      config.headers.Authorization = `Bearer ${token}`;
+    }
+
     // You can modify the request config here
     console.log('Request sent:', config);
     return config;

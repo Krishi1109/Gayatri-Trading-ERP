@@ -81,10 +81,10 @@ const Navbar = () => {
               </li>
               <li>
                 <Link
-                  to="/stock"
+                  to="/purchase"
                   className="block py-2 px-3 md:p-0 text-cyan-300 rounded md:bg-transparent md:text-cyan-300 md:dark:text-blue-500"
                 >
-                  Stocks
+                  Purchase
                 </Link>
               </li>
             </ul>
