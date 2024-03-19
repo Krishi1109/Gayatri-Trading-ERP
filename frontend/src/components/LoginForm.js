@@ -20,7 +20,6 @@ const LoginForm = () => {
       password: Yup.string().required("password is required."),
     }),
     onSubmit: (values) => {
-      console.log("values =>", values)
       dispatch(userLogin(values));
       navigate('/dashboard')
     }

@@ -23,6 +23,7 @@ const authSlice = createSlice({
         state.loginApistatus = ApiStates.success;
         state.isAuth = true;
         state.userInfo = action.payload;
+        localStorage.setItem("token", action.payload.result.token)
       })
       .addCase(userLogin.rejected, (state) => {
         state.loginApistatus = ApiStates.failed;

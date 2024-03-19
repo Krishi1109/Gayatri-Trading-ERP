@@ -10,7 +10,6 @@ const initialState = {
 export const isDemo = createAsyncThunk("isDemo", async () => {
   try {
     const response = await axios.get(`${BASEURL}/api/user/demo`);
-    console.log(response);
     return response.data;
   } catch (error) {
     return { error: error.message };

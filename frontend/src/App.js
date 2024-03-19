@@ -1,11 +1,10 @@
-import { useSelector } from "react-redux";
 import DashboardScreen from "./Screens/DashboardScreen/DashboardScreen";
 import LandingScreen from "./Screens/LandingScreen/LandingScreen";
 import Authenticate from "./components/Authentication/Authenticate";
 import Footer from "./components/Footer";
 import Navbar from "./components/Navbar";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
-import StockManagement from "./Screens/StockManagementScreen/StockManagement";
+import PurchaseManagement from "./Screens/PurchaseManagementScreen/PurchaseManagement";
 
 const App = () => {
   return (
@@ -15,7 +14,7 @@ const App = () => {
         <Route path="/" element={<LandingScreen />} />
         <Route element={<Authenticate />}>
           <Route path="/dashboard" element={<DashboardScreen />} />
-          <Route path="/stock" element={<StockManagement />} />
+          <Route path="/purchase" element={<PurchaseManagement />} />
         </Route>
       </Routes>
       <Footer />
