@@ -5,7 +5,9 @@ import ActiveOrdersPurchaseTable from "./ActiveOrdersPurchaseTable";
 import PurchaseListTable from "./PurchaseListTable";
 import { Container, Stack } from "@mui/material";
 import BrandModal from "./Modals/BrandModal";
+import CategoryModal from "./Modals/CategoryModal";
 import { fetchBrands } from "../../apis/brands";
+import { fetchCategories } from "../../apis/categories";
 
 const StockManagement = () => {
   const dispatch = useDispatch();
@@ -13,6 +15,8 @@ const StockManagement = () => {
   const { deleteBrandApiStatus } = useSelector((state) => state.brands);
   useEffect(() => {
     dispatch(fetchPurchaseList());
+    dispatch(fetchBrands());
+    dispatch(fetchCategories());
   }, [dispatch, deleteBrandApiStatus]);
   return (
     <Container maxWidth="xl">
@@ -20,8 +24,9 @@ const StockManagement = () => {
         Purchase Management
       </h1>
       <ActiveOrdersPurchaseTable />
-      <Stack sx={{ py: 5 }}>
+      <Stack sx={{ py: 5 }} direction={"row"} gap={3}>
         <BrandModal />
+        <CategoryModal />
       </Stack>
       <PurchaseListTable />
     </Container>
