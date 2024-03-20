@@ -23,6 +23,16 @@ const fetchBrands = async (req, res, next) => {
 const addBrand = async (req, res, next) => {
   try {
     const { name } = req.body;
+    name.toUpperCase();
+    const existBrandName = await Brand.findOne({ name });
+    if (existBrandName) {
+      return next(
+        new ErrorHandler(
+          "Ohh! Brand with this name is already exist!",
+          StatusCodes.CONFLICT
+        )
+      );
+    }
     const brand = new Brand({ name: name.toUpperCase() });
 
     const addBrand = await brand.save();
@@ -35,7 +45,7 @@ const addBrand = async (req, res, next) => {
     return next(
       new ErrorHandler(
         error.message ?? Constants.defaultMessage,
-        StatusCodes.INTERNAL_SERVER_ERROR
+        error.status ?? StatusCodes.INTERNAL_SERVER_ERROR
       )
     );
   }

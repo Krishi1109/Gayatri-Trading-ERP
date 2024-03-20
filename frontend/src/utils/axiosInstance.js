@@ -3,7 +3,7 @@ import axios from 'axios';
 // Create an Axios instance
 const axiosInstance = axios.create({
   baseURL: process.env.REACT_APP_BASE_URL,
-  // timeout: 5000,
+  // timeout: 20000,
   headers: {
     'Content-Type': 'application/json', // Example headers
   },
@@ -18,7 +18,7 @@ axiosInstance.interceptors.request.use(
     }
 
     // You can modify the request config here
-    console.log('Request sent:', config);
+    // console.log('Request sent:', config);
     return config;
   },
   (error) => {
@@ -32,7 +32,7 @@ axiosInstance.interceptors.request.use(
 axiosInstance.interceptors.response.use(
   (response) => {
     // You can modify the response data here
-    console.log('Response received:', response);
+    // console.log('Response received:', response);
     return response;
   },
   (error) => {

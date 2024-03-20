@@ -12,3 +12,5 @@ export const primaryDarkColor = "#155e75";
 export const primaryMediumColor = "#0891b2";
 export const GreenColor = "#2ecc71";
 export const RedColor = "#e74c3c";
+export const GrayColor = "#bdbdbd"
+export const WhiteColor = "#FFFFFF"
