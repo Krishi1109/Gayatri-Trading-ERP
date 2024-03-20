@@ -1,34 +1,27 @@
-import React, { useEffect, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { fetchPurchaseList } from "../../apis/purchase";
-import formatDate from "../../utils/formatDates";
+import React, { useState } from "react";
+import { useSelector } from "react-redux";
+import formatDate from "../../utils/formatDates.js";
 import "../../shared/sharedStyles.js";
-import { Box, Container, TableHead, TableRow, Typography } from "@mui/material";
+import { TableHead, TableRow, Typography } from "@mui/material";
 import Paper from "@mui/material/Paper";
 import TableContainer from "@mui/material/TableContainer";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
 import Pagination from "@mui/material/Pagination";
 import {
-  DarkStyledTableCell,
   StyledTableCell,
   StyledTableRow,
   getStatusColor,
-} from "./purchaseManagement.styled";
+} from "./purchaseManagement.styled.js";
 import { CyanOutlineButton } from "../../shared/sharedStyles.js";
-import ModalComponent from "./ModalComponent.jsx";
+import ShowOrdersModalComponent from "./Modals/ShowOrdersModalComponent.jsx";
+import { GrayColor } from "../../shared/constants.js";
 
-const PurchaseTable = () => {
-  const dispatch = useDispatch();
-
+const PurchaseListTable = () => {
   const { purchaseInfo } = useSelector((state) => state.purchase);
   const [tableData] = useState(purchaseInfo);
   const [page, setPage] = useState(Math.ceil(purchaseInfo.length / 10)); // Last page by default
   const rowsPerPage = 10; // Number of rows per page
-
-  useEffect(() => {
-    dispatch(fetchPurchaseList());
-  });
 
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
@@ -39,91 +32,8 @@ const PurchaseTable = () => {
     page * rowsPerPage
   );
 
-  const filteredData = tableData.filter((item) => item.status === "ACTIVE");
-
   return (
-    <Container maxWidth="xl">
-      <Box sx={{ pb: 5 }}>
-        <TableContainer component={Paper}>
-          {/* Active order Table */}
-          <Table aria-label="customized table">
-            <TableHead>
-              <TableRow>
-                <DarkStyledTableCell>DATE</DarkStyledTableCell>
-                <DarkStyledTableCell>BRAND</DarkStyledTableCell>
-                <DarkStyledTableCell>TYPE</DarkStyledTableCell>
-                <DarkStyledTableCell>VARIATION</DarkStyledTableCell>
-                <DarkStyledTableCell>PRICE</DarkStyledTableCell>
-                <DarkStyledTableCell>QTY</DarkStyledTableCell>
-                <DarkStyledTableCell>ORDERS</DarkStyledTableCell>
-                <DarkStyledTableCell>REMAINING QTY</DarkStyledTableCell>
-                <DarkStyledTableCell>STATUS</DarkStyledTableCell>
-                <DarkStyledTableCell>ACTIONS</DarkStyledTableCell>
-              </TableRow>
-            </TableHead>
-            <TableBody>
-              {filteredData.map((item) => (
-                <StyledTableRow key={item.id}>
-                  <DarkStyledTableCell component="th" scope="row">
-                    <Typography variant="body2" fontWeight="bold">
-                      {formatDate(item.createdAt)}
-                    </Typography>
-                  </DarkStyledTableCell>
-                  <DarkStyledTableCell>
-                    <Typography variant="body2" fontWeight="bold">
-                      {item.brand}
-                    </Typography>
-                  </DarkStyledTableCell>
-                  <DarkStyledTableCell>
-                    <Typography variant="body2" fontWeight="bold">
-                      {item.oil_type}
-                    </Typography>
-                  </DarkStyledTableCell>
-                  <DarkStyledTableCell>
-                    <Typography variant="body2" fontWeight="bold">
-                      {item.package_variant}
-                    </Typography>
-                  </DarkStyledTableCell>
-                  <DarkStyledTableCell>
-                    <Typography variant="body2" fontWeight="bold">
-                      {item.price}
-                    </Typography>
-                  </DarkStyledTableCell>
-                  <DarkStyledTableCell>
-                    <Typography variant="body2" fontWeight="bold">
-                      {item.qty}
-                    </Typography>
-                  </DarkStyledTableCell>
-                  <DarkStyledTableCell>
-                    <ModalComponent
-                      brand={item.brand}
-                      label={"Show Orders"}
-                      orders={item?.orders}
-                      qty={item?.qty}
-                      ordered_qty={item?.ordered_qty}
-                    />
-                  </DarkStyledTableCell>
-                  <DarkStyledTableCell>
-                    <Typography variant="body2" fontWeight="bold">
-                      {item?.qty - item?.ordered_qty}
-                    </Typography>
-                  </DarkStyledTableCell>
-                  <DarkStyledTableCell>
-                    <Typography
-                      variant="body2"
-                      color={getStatusColor(item.status)}
-                      fontWeight={"bold"}
-                    >
-                      {item.status}
-                    </Typography>
-                  </DarkStyledTableCell>
-                  <DarkStyledTableCell>demo</DarkStyledTableCell>
-                </StyledTableRow>
-              ))}
-            </TableBody>
-          </Table>
-        </TableContainer>
-      </Box>
+    <>
       <TableContainer component={Paper}>
         {/* All Order Table */}
         <Table aria-label="customized table">
@@ -143,7 +53,7 @@ const PurchaseTable = () => {
           </TableHead>
           <TableBody>
             {slicedData.map((item) => (
-              <StyledTableRow key={item.id}>
+              <StyledTableRow key={item._id}>
                 <StyledTableCell component="th" scope="row">
                   <Typography variant="body2" fontWeight="bold">
                     {formatDate(item.createdAt)}
@@ -161,7 +71,11 @@ const PurchaseTable = () => {
                 </StyledTableCell>
                 <StyledTableCell>
                   <Typography variant="body2" fontWeight="bold">
-                    {item.package_variant}
+                    {item.weight} {item.unit}
+                    <span style={{ color: `${GrayColor}` }}>
+                      {" "}
+                      X {item.items_per_package}
+                    </span>
                   </Typography>
                 </StyledTableCell>
                 <StyledTableCell>
@@ -175,7 +89,7 @@ const PurchaseTable = () => {
                   </Typography>
                 </StyledTableCell>
                 <StyledTableCell>
-                  <ModalComponent
+                  <ShowOrdersModalComponent
                     brand={item.brand}
                     label={"Show Orders"}
                     orders={item?.orders}
@@ -224,8 +138,8 @@ const PurchaseTable = () => {
           size="large"
         />
       </div>
-    </Container>
+    </>
   );
 };
 
-export default PurchaseTable;
+export default PurchaseListTable;

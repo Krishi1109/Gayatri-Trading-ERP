@@ -9,12 +9,12 @@ import {
   Paper,
 } from "@mui/material";
 import React, { useState } from "react";
-import { CyanOutlineButton } from "../../shared/sharedStyles";
-import BasicModal from "../../shared/BasicModal";
-import formatDate from "../../utils/formatDates";
-import { GreenColor, primaryMediumColor } from "../../shared/constants";
+import { CyanOutlineButton } from "../../../shared/sharedStyles";
+import BasicModal from "../../../shared/BasicModal";
+import formatDate from "../../../utils/formatDates";
+import { GreenColor, primaryMediumColor } from "../../../shared/constants";
 
-const ModalComponent = (props) => {
+const ShowOrdersModalComponent = (props) => {
   const [openModal, setOpenModal] = useState(false);
 
   const handleOpenModal = () => {
@@ -80,4 +80,4 @@ const ModalComponent = (props) => {
   );
 };
 
-export default ModalComponent;
+export default ShowOrdersModalComponent;

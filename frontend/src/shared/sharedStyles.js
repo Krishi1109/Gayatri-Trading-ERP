@@ -1,6 +1,7 @@
 import { Button, darken } from "@mui/material";
 import { styled } from "@mui/material/styles";
 import {
+  RedColor,
   primaryDarkColor,
   primaryLightColor,
   primaryMediumColor,
@@ -45,5 +46,26 @@ export const CyanOutlineButton = styled(Button)(({ theme }) => ({
     "&:hover": {
       borderColor: primaryDarkColor, // Set border color to primary dark color on hover
     },
+  },
+}));
+
+
+export const RedFillButton = styled(Button)(({ theme }) => ({
+  textTransform: "none",
+  // borderRadius: ShBorderRadius,
+  width: "fit-content",
+  "&.self-center": {
+    alignSelf: "center",
+  },
+  "&.self-right": {
+    alignSelf: "flex-end",
+  },
+  "&:not(.Mui-disabled)": {
+    backgroundColor: RedColor,
+    color: "white",
+  },
+  "&:hover": {
+    // darken function from @mui. Takes in a color and value to darken the given color.
+    backgroundColor: darken(RedColor, 0.1),
   },
 }));

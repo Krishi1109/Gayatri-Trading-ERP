@@ -6,26 +6,13 @@ const isPositive = (value) => {
 
 const purchaseSchema = new mongoose.Schema(
   {
-    brand: {
-      type: String,
-      required: true,
-    },
-    oil_type: {
-      type: String,
-      required: true,
-    },
-    package_variant: {
-      type: String,
-      required: true,
-    },
-    price: {
-      type: Number,
-      required: true,
-    },
-    qty: {
-      type: Number,
-      required: true,
-    },
+    brand: { type: String, required: true },
+    oil_type: { type: String, required: true },
+    weight: { type: Number, required: true },
+    unit: { type: String, required: true },
+    items_per_package: { type: Number, required: true },
+    price: { type: Number, required: true },
+    qty: { type: Number, required: true },
     ordered_qty: {
       type: Number,
       default: 0,
