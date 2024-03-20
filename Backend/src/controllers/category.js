@@ -1,14 +1,14 @@
 import { StatusCodes } from "http-status-codes";
-import Package from "../models/package";
+import Category from "../models/category";
 import ErrorHandler from "../utils/errorHandler";
 
-const fetchPackageVariant = async (req, res, next) => {
+const fetchCategory = async (req, res, next) => {
   try {
-    const packageVariants = await Package.find();
+    const categories = await Category.find();
     res.status(StatusCodes.OK).send({
       success: true,
-      message: "Fetch all packages successfully!",
-      result: packageVariants,
+      message: "Fetch categories successfully!",
+      result: categories,
     });
   } catch (error) {
     return next(
@@ -20,16 +20,16 @@ const fetchPackageVariant = async (req, res, next) => {
   }
 };
 
-const addPackageVariant = async (req, res, next) => {
+const addCategory = async (req, res, next) => {
   try {
     const { name } = req.body;
-    const packageVariant = new Package({ name: name.toUpperCase() });
+    const category = new Category({ name: name.toUpperCase() });
 
-    const addPackageVariant = await packageVariant.save();
+    const addCategory = await category.save();
     res.status(StatusCodes.OK).send({
       success: true,
-      message: "Add Brand Successfully!",
-      result: addPackageVariant,
+      message: "Add Categoty Successfully!",
+      result: addCategory,
     });
   } catch (error) {
     return next(
@@ -41,15 +41,15 @@ const addPackageVariant = async (req, res, next) => {
   }
 };
 
-const deletePackageVariant = async (req, res, next) => {
+const deleteCategory = async (req, res, next) => {
   try {
     const id = req.params.id;
-    await Package.findByIdAndDelete(id);
+    await Category.findByIdAndDelete(id);
     res.status(StatusCodes.OK).send({
       success: true,
-      message: "Delete package variant successfully!",
+      message: "Delete Category successfully!",
     });
-  } catch (error) {
+  } catch (error) { 
     return next(
       new ErrorHandler(
         error.message ?? Constants.defaultMessage,
@@ -59,10 +59,10 @@ const deletePackageVariant = async (req, res, next) => {
   }
 };
 
-const packageController = {
-  fetchPackageVariant,
-  addPackageVariant,
-  deletePackageVariant,
+const categoryController = {
+  fetchCategory,
+  addCategory,
+  deleteCategory,
 };
 
-export default packageController;
+export default categoryController;

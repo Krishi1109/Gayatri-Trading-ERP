@@ -4,7 +4,7 @@ import cors from "cors";
 import userRoute from "./routes/users.route";
 import purchaseRouter from "./routes/purchase"
 import brandRouter from "./routes/brand"
-import packageRouter from "./routes/package"
+import categoryRouter from "./routes/category"
 
 const app = Express();
 
@@ -16,6 +16,6 @@ app.use(cors());
 app.use("/api/user", userRoute);
 app.use("/api/purchase", purchaseRouter);
 app.use("/api/brand", brandRouter);
-app.use("/api/package", packageRouter);
+app.use("/api/category", categoryRouter);
 
 export default app;
