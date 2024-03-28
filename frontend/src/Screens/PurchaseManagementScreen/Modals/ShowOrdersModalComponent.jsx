@@ -32,12 +32,17 @@ const ShowOrdersModalComponent = (props) => {
           {props.label}
         </CyanOutlineButton>
       </Typography>
-      <BasicModal open={openModal} handleClose={handleCloseModal}>
+      <BasicModal
+        open={openModal}
+        handleClose={handleCloseModal}
+        minWidth={400}
+        maxWidth={400}
+      >
         <Typography variant="body1" fontWeight="bold">
           Order Details
         </Typography>
         {/* Display order details in a table format */}
-        <TableContainer component={Paper}>
+        <TableContainer component={Paper} sx={{ my: 2 }}>
           <Table>
             <TableHead>
               <TableRow>

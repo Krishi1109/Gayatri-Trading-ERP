@@ -3,11 +3,12 @@ import { fetchPurchaseList } from "../../apis/purchase";
 import { useDispatch, useSelector } from "react-redux";
 import ActiveOrdersPurchaseTable from "./ActiveOrdersPurchaseTable";
 import PurchaseListTable from "./PurchaseListTable";
-import { Container, Stack } from "@mui/material";
+import { Container, Stack, Typography } from "@mui/material";
 import BrandModal from "./Modals/BrandModal";
 import CategoryModal from "./Modals/CategoryModal";
 import { fetchBrands } from "../../apis/brands";
 import { fetchCategories } from "../../apis/categories";
+import PurchaseEntryModal from "./Modals/PurchaseEntryModal";
 
 const StockManagement = () => {
   const dispatch = useDispatch();
@@ -20,14 +21,18 @@ const StockManagement = () => {
   }, [dispatch, deleteBrandApiStatus]);
   return (
     <Container maxWidth="xl">
-      <h1 className="text-center my-4 font-bold text-xl border-b">
-        Purchase Management
-      </h1>
-      <ActiveOrdersPurchaseTable />
-      <Stack sx={{ py: 5 }} direction={"row"} gap={3}>
-        <BrandModal />
-        <CategoryModal />
+      <Stack sx={{ py: 3 }} direction={"row"} justifyContent="space-between">
+        <Stack direction={"row"} gap={3}>
+          <BrandModal />
+          <CategoryModal />
+        </Stack>
+        <Typography variant="h5" gutterBottom fontWeight="bold" align="center">
+          Purchase Management
+        </Typography>
+        <PurchaseEntryModal />
       </Stack>
+      <ActiveOrdersPurchaseTable />
+
       <PurchaseListTable />
     </Container>
   );
