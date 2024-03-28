@@ -1,12 +1,35 @@
 import { Button, darken } from "@mui/material";
 import { styled } from "@mui/material/styles";
 import {
+  GreenColor,
   RedColor,
+  WhiteColor,
   primaryDarkColor,
   primaryLightColor,
   primaryMediumColor,
 } from "./constants";
 
+export const GreenFillButton = styled(Button)(({ theme }) => ({
+  padding: `${theme.spacing(0.5)} ${theme.spacing(2)}`,
+  textTransform: "none",
+  color: WhiteColor,
+  // borderRadius: ShBorderRadius,
+  width: "fit-content",
+  "&.self-center": {
+    alignSelf: "center",
+  },
+  "&.self-right": {
+    alignSelf: "flex-end",
+  },
+  "&:not(.Mui-disabled)": {
+    backgroundColor: GreenColor,
+    color: "white",
+  },
+  "&:hover": {
+    // darken function from @mui. Takes in a color and value to darken the given color.
+    backgroundColor: darken(GreenColor, 0.1),
+  },
+}));
 export const CyanFillButton = styled(Button)(({ theme }) => ({
   padding: `${theme.spacing(0.5)} ${theme.spacing(2)}`,
   textTransform: "none",
@@ -48,7 +71,6 @@ export const CyanOutlineButton = styled(Button)(({ theme }) => ({
     },
   },
 }));
-
 
 export const RedFillButton = styled(Button)(({ theme }) => ({
   textTransform: "none",

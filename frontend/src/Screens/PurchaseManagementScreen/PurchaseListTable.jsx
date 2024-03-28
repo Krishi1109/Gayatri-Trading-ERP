@@ -20,7 +20,7 @@ import { GrayColor } from "../../shared/constants.js";
 const PurchaseListTable = () => {
   const { purchaseInfo } = useSelector((state) => state.purchase);
   const [tableData] = useState(purchaseInfo);
-  const [page, setPage] = useState(Math.ceil(purchaseInfo.length / 10)); // Last page by default
+  const [page, setPage] = useState(Math.ceil(1)); 
   const rowsPerPage = 10; // Number of rows per page
 
   const handleChangePage = (event, newPage) => {
@@ -66,7 +66,7 @@ const PurchaseListTable = () => {
                 </StyledTableCell>
                 <StyledTableCell>
                   <Typography variant="body2" fontWeight="bold">
-                    {item.oil_type}
+                    {item.category}
                   </Typography>
                 </StyledTableCell>
                 <StyledTableCell>

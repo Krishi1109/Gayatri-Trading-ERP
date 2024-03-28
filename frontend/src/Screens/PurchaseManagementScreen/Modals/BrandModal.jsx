@@ -40,7 +40,7 @@ const BrandModal = () => {
   const [openModal, setOpenModal] = useState(false);
   const [newBrandName, setNewBrandName] = useState(""); // State to hold the new brand name
 
-  const { brandInto, addBrandApiStatus, error, success, deleteBrandApiStatus } =
+  const { brandInfo, addBrandApiStatus, error, success, deleteBrandApiStatus } =
     useSelector((state) => state.brands);
 
   useEffect(() => {
@@ -80,7 +80,7 @@ const BrandModal = () => {
         </CyanFillButton>
       </Typography>
 
-      <BasicModal open={openModal} handleClose={handleCloseModal}>
+      <BasicModal open={openModal} handleClose={handleCloseModal} minWidth={500} maxWidth={500}>
         {error ? (
           <Alert
             severity="error"
@@ -159,8 +159,8 @@ const BrandModal = () => {
                 </TableRow>
               </TableHead>
               <TableBody>
-                {brandInto?.length ? (
-                  brandInto.map((item) => (
+                {brandInfo?.length ? (
+                  brandInfo.map((item) => (
                     <StyledTableRow key={item._id}>
                       <StyledTableCell>
                         <Typography variant="body2">{item.name}</Typography>

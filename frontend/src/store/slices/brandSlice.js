@@ -4,7 +4,7 @@ import { addBrand, deleteBrand, fetchBrands } from "../../apis/brands";
 
 const initialState = {
   fetchBrandsApiStatus: ApiStates.idle,
-  brandInto: [],
+  brandInfo: [],
   addBrandApiStatus: ApiStates.idle,
   error: "",
   success: "",
@@ -28,7 +28,7 @@ const brandSlice = createSlice({
     });
     builder.addCase(fetchBrands.fulfilled, (state, action) => {
       state.fetchBrandsApiStatus = ApiStates.success;
-      state.brandInto = action.payload;
+      state.brandInfo = action.payload;
     });
     builder.addCase(fetchBrands.rejected, (state) => {
       state.fetchBrandsApiStatus = ApiStates.failed;

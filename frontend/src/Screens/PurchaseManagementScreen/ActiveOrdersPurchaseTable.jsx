@@ -58,7 +58,7 @@ const ActiveOrdersPurchaseTable = () => {
                 </DarkStyledTableCell>
                 <DarkStyledTableCell>
                   <Typography variant="body2" fontWeight="bold">
-                    {item.oil_type}
+                    {item.category}
                   </Typography>
                 </DarkStyledTableCell>
                 <DarkStyledTableCell>
@@ -68,7 +68,7 @@ const ActiveOrdersPurchaseTable = () => {
                 </DarkStyledTableCell>
                 <DarkStyledTableCell>
                   <Typography variant="body2" fontWeight="bold">
-                    {item.price}
+                  ₹{" "}{item.price}
                   </Typography>
                 </DarkStyledTableCell>
                 <DarkStyledTableCell>
