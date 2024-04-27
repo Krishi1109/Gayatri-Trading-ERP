@@ -11,6 +11,7 @@ import { fetchCategories } from "../../apis/categories";
 import PurchaseEntryModal from "./Modals/PurchaseEntryModal";
 import VariantModal from "./Modals/VariantModal";
 import { fetchVariants } from "../../apis/variants";
+import UnitModal from "./Modals/UnitModal";
 
 const StockManagement = () => {
   const dispatch = useDispatch();
@@ -24,19 +25,25 @@ const StockManagement = () => {
   }, [dispatch, deleteBrandApiStatus]);
   return (
     <Container maxWidth="xl">
-      <Stack sx={{ py: 0 }} direction={"row"} justifyContent="space-between">
-        <Stack direction={"row"} gap={3}>
+      {/* Main Heading */}
+      <Typography variant="h5" gutterBottom fontWeight="bold" align="center">
+        Purchase Management
+      </Typography>
+      {/* Configuration buttons */}
+      <Stack sx={{ py: 0.5 }} direction={"row"} justifyContent="space-between">
+        <Stack direction={"row"} gap={0.5}>
           <BrandModal />
           <CategoryModal />
           <VariantModal />
+          <UnitModal />
         </Stack>
-        <Typography variant="h5" gutterBottom fontWeight="bold" align="center">
-          Purchase Management
-        </Typography>
-        <PurchaseEntryModal />
+        <Stack>
+          <PurchaseEntryModal />
+        </Stack>
       </Stack>
+      {/* Table for the active purchase order */}
       <ActiveOrdersPurchaseTable />
-
+      {/* Table for the all purchase order  */}
       <PurchaseListTable />
     </Container>
   );

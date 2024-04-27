@@ -53,7 +53,7 @@ const PurchaseEntryModal = (props) => {
   return (
     <div>
       <Typography variant="body2" fontWeight="bold">
-        <CyanFillButton variant="outlined" onClick={handleOpenModal}>
+        <CyanFillButton onClick={handleOpenModal}>
           <Typography fontWeight="bold" variant="subtitle1">
             Purchase Entry
           </Typography>
