@@ -30,17 +30,25 @@ const fetchPurchaseList = async (req, res, next) => {
   }
 };
 
+// Just for the demo purpose 
 const filteredPurchaseList = async (req, res, next) => {
   try {
-    const { brand, category } = req.query;
-    const purchaseList = await Purchase.find({}).sort({ createdAt: -1 });
+    const { brand, category, status } = req.query;
+    const purchaseList = await Purchase.find();
     let filteredResult = purchaseList;
+    filteredResult = await purchaseList.filter(
+      (item) => (item.category && item.category === category) && (item.status && item.status === status) & (item.brand && item.brand === brand)
+    );
     if (brand) {
-      filteredResult = purchaseList.filter((item) => item.brand === brand);
+      filteredResult = filteredResult.filter((item) => item.brand === brand);
     }
     if (category) {
-      filteredResult = purchaseList.filter((item) => item.category === category);
+      filteredResult = filteredResult.filter((item) => item.category === category);
     }
+    if (status) {
+      filteredResult = filteredResult.filter((item) => item.status === status);
+    }
+    console.log(filteredResult.length);
     res.status(StatusCodes.OK).send({
       success: true,
       message: "Fetch Purchas list successfully!",

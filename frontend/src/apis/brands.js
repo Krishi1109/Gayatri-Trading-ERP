@@ -33,7 +33,6 @@ export const deleteBrand = createAsyncThunk(
   "deleteBrand",
   async ({ id }, { rejectWithValue }) => {
     try {
-      console.log("id => ", id)
       const response = await API.DELETE(`/api/brand/${id}`);
       return response.data;
     } catch (error) {

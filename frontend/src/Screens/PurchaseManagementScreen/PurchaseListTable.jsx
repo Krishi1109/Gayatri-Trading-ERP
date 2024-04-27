@@ -1,39 +1,93 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import formatDate from "../../utils/formatDates.js";
 import "../../shared/sharedStyles.js";
-import { TableHead, TableRow, Typography } from "@mui/material";
+import { TableHead, TableRow, Typography, Autocomplete, TextField, Stack } from "@mui/material";
 import Paper from "@mui/material/Paper";
 import TableContainer from "@mui/material/TableContainer";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
 import Pagination from "@mui/material/Pagination";
-import {
-  StyledTableCell,
-  StyledTableRow,
-  getStatusColor,
-} from "./purchaseManagement.styled.js";
+import { StyledTableCell, StyledTableRow, getStatusColor } from "./purchaseManagement.styled.js";
 import { CyanOutlineButton } from "../../shared/sharedStyles.js";
 import ShowOrdersModalComponent from "./Modals/ShowOrdersModalComponent.jsx";
 import { GrayColor } from "../../shared/constants.js";
 
 const PurchaseListTable = () => {
   const { purchaseInfo } = useSelector((state) => state.purchase);
-  const [tableData] = useState(purchaseInfo);
-  const [page, setPage] = useState(Math.ceil(1)); 
-  const rowsPerPage = 10; // Number of rows per page
+  const [tableData, setTableData] = useState(purchaseInfo);
+  const [page, setPage] = useState(1);
+  const [selectedBrand, setSelectedBrand] = useState("");
+  const [selectedCategory, setSelectedCategory] = useState("");
+  const rowsPerPage = 10;
+
+  const { brandInfo } = useSelector((state) => state.brands);
+  const { categoryInto, addCategoryApiStatus } = useSelector((state) => state.categories);
+
+  console.log(categoryInto);
 
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
   };
 
-  const slicedData = tableData.slice(
-    (page - 1) * rowsPerPage,
-    page * rowsPerPage
-  );
+  const handleBrandFilter = (event, value) => {
+    setSelectedBrand(value);
+  };
+  const handleCategoryFilter = (event, value) => {
+    setSelectedCategory(value);
+  };
+  useEffect(() => {
+    filterData(selectedBrand, selectedCategory);
+  }, [selectedBrand, selectedCategory]);
 
+  const filterData = (brand, category) => {
+    let filteredData = purchaseInfo;
+    console.log("sdfsdf", brand);
+
+    if (brand) {
+      filteredData = filteredData.filter((item) => item.brand && item.brand.toLowerCase().includes(brand.toLowerCase()));
+    }
+
+    if (category) {
+      filteredData = filteredData.filter((item) => item.category && item.category.toLowerCase().includes(category.toLowerCase()));
+    }
+
+    setTableData(filteredData);
+    setPage(1); // Reset page when applying filter
+  };
+
+  const slicedData = tableData.slice((page - 1) * rowsPerPage, page * rowsPerPage);
   return (
     <>
+      <Stack direction="row" gap={2} sx={{ my: 2 }}>
+        {/* Brand Filter */}
+        <div>
+          <Autocomplete
+            size="small"
+            disablePortal
+            id="text-btrand"
+            options={brandInfo.map((r) => r.name)}
+            onChange={(e, value) => handleBrandFilter(e, value)}
+            value={selectedBrand}
+            sx={{ width: 200 }}
+            renderInput={(params) => <TextField {...params} label="Brand" />}
+          />
+        </div>
+
+        <div>
+          <Autocomplete
+            size="small"
+            disablePortal
+            id="text-btrand"
+            options={categoryInto.map((r) => r.name)}
+            onChange={(e, value) => handleCategoryFilter(e, value)}
+            value={selectedCategory}
+            sx={{ width: 200 }}
+            renderInput={(params) => <TextField {...params} label="Category" />}
+          />
+        </div>
+      </Stack>
+
       <TableContainer component={Paper}>
         {/* All Order Table */}
         <Table aria-label="customized table">
@@ -72,10 +126,7 @@ const PurchaseListTable = () => {
                 <StyledTableCell>
                   <Typography variant="body2" fontWeight="bold">
                     {item.weight} {item.unit}
-                    <span style={{ color: `${GrayColor}` }}>
-                      {" "}
-                      X {item.items_per_package}
-                    </span>
+                    <span style={{ color: `${GrayColor}` }}> X {item.items_per_package}</span>
                   </Typography>
                 </StyledTableCell>
                 <StyledTableCell>
@@ -89,13 +140,7 @@ const PurchaseListTable = () => {
                   </Typography>
                 </StyledTableCell>
                 <StyledTableCell>
-                  <ShowOrdersModalComponent
-                    brand={item.brand}
-                    label={"Show Orders"}
-                    orders={item?.orders}
-                    qty={item?.qty}
-                    ordered_qty={item?.ordered_qty}
-                  />
+                  <ShowOrdersModalComponent brand={item.brand} label={"Show Orders"} orders={item?.orders} qty={item?.qty} ordered_qty={item?.ordered_qty} />
                 </StyledTableCell>
                 <StyledTableCell>
                   <Typography variant="body2" fontWeight="bold">
@@ -103,11 +148,7 @@ const PurchaseListTable = () => {
                   </Typography>
                 </StyledTableCell>
                 <StyledTableCell>
-                  <Typography
-                    variant="body2"
-                    color={getStatusColor(item.status)}
-                    fontWeight={"bold"}
-                  >
+                  <Typography variant="body2" color={getStatusColor(item.status)} fontWeight={"bold"}>
                     {item.status}
                   </Typography>
                 </StyledTableCell>
@@ -120,7 +161,7 @@ const PurchaseListTable = () => {
         </Table>
       </TableContainer>
 
-      {/* Pagiantion for the table */}
+      {/* Pagination for the table */}
       <div
         style={{
           display: "flex",
