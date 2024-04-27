@@ -21,7 +21,7 @@ const StockManagement = () => {
   }, [dispatch, deleteBrandApiStatus]);
   return (
     <Container maxWidth="xl">
-      <Stack sx={{ py: 3 }} direction={"row"} justifyContent="space-between">
+      <Stack sx={{ py: 0 }} direction={"row"} justifyContent="space-between">
         <Stack direction={"row"} gap={3}>
           <BrandModal />
           <CategoryModal />
