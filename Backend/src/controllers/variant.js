@@ -4,7 +4,7 @@ import { StatusCodes } from "http-status-codes";
 
 const fetchVariants = async (req, res, next) => {
   try {
-    const variants = await Variant.find();
+    const variants = await Variant.find().sort({ variant: 1 });
     res.status(StatusCodes.OK).send({
       success: true,
       message: "Fetch variants successfully!",

@@ -1,28 +1,29 @@
 import { Alert, Button, IconButton, OutlinedInput, Paper, Stack, Table, TableBody, TableContainer, TableHead, TableRow, Typography } from "@mui/material";
 import React, { useEffect, useState } from "react";
 import { CyanFillButton, CyanOutlineButton } from "../../../shared/sharedStyles";
-import BasicModal from "../../../shared/BasicModal";
 import AddIcon from "@mui/icons-material/Add";
-import { ApiStates, RedColor, primaryMediumColor } from "../../../shared/constants";
+import BasicModal from "../../../shared/BasicModal";
 import { useDispatch, useSelector } from "react-redux";
-import { fetchBrands, addBrand, deleteBrand } from "../../../apis/brands"; // Import the addBrand action creator
-import { resetFields } from "../../../store/slices/brandSlice";
+import { ApiStates, RedColor, primaryMediumColor } from "../../../shared/constants";
+import { addVariant, deleteVariant, fetchVariants } from "../../../apis/variants"; // Import the addBrand action creator
+import GradientCircularProgress from "../../../components/loader";
+import { resetVariantFields } from "../../../store/slices/variantSlice";
 import { SmallStyledTableCell, StyledTableCell, StyledTableRow } from "../purchaseManagement.styled";
 import DeleteIcon from "@mui/icons-material/Delete";
-import GradientCircularProgress from "../../../components/loader";
 
-const BrandModal = () => {
+const VariantModal = () => {
   const dispatch = useDispatch();
-  const [openModal, setOpenModal] = useState(false);
-  const [newBrandName, setNewBrandName] = useState(""); // State to hold the new brand name
 
-  const { brandInfo, addBrandApiStatus, error, success, deleteBrandApiStatus } = useSelector((state) => state.brands);
+  const [openModal, setOpenModal] = useState(false);
+  const [newVariant, setNewVariant] = useState("");
+
+  const { variantInfo, addVariantApiStatus, error, success, deleteVariantApiStatus } = useSelector((state) => state.variants);
 
   useEffect(() => {
-    if (addBrandApiStatus === ApiStates.success || deleteBrandApiStatus === ApiStates.success) {
-      dispatch(fetchBrands());
+    if (addVariantApiStatus === ApiStates.success || deleteVariantApiStatus === ApiStates.success) {
+      dispatch(fetchVariants());
     }
-  }, [dispatch, addBrandApiStatus, deleteBrandApiStatus]);
+  }, [dispatch, addVariantApiStatus, deleteVariantApiStatus]);
 
   const handleOpenModal = () => {
     setOpenModal(true);
@@ -30,23 +31,24 @@ const BrandModal = () => {
 
   const handleCloseModal = () => {
     setOpenModal(false);
-    dispatch(resetFields());
+    dispatch(resetVariantFields());
   };
 
   const handleAddBrand = () => {
-    dispatch(addBrand({ name: newBrandName }));
-    setNewBrandName("");
+    dispatch(addVariant({ variant: newVariant }));
+    setNewVariant("");
   };
-  const BrandDeleteHandler = (id) => {
-    dispatch(deleteBrand({ id }));
+
+  const VariantDeleteHandler = (id) => {
+    dispatch(deleteVariant({ id }));
   };
 
   return (
-    <>
+    <div>
       <Typography variant="body2" fontWeight="bold">
         <CyanFillButton onClick={handleOpenModal}>
           <Typography fontWeight="bold" variant="subtitle1">
-            Brand
+            Variant
           </Typography>{" "}
           <AddIcon />
         </CyanFillButton>
@@ -64,43 +66,40 @@ const BrandModal = () => {
             {success}
           </Alert>
         ) : null}
-
         <Typography variant="body1" gutterBottom fontWeight="bold" textAlign="center">
-          Brand Details
+          Variants Details
         </Typography>
         <Stack direction="row" sx={{ py: 3 }} justifyContent="space-between">
-          {/* Input field for entering new brand name */}
-          <OutlinedInput size="small" value={newBrandName} placeholder="Brand Name" onChange={(e) => setNewBrandName(e.target.value)} />
-          {/* Button to add the brand */}
-          <CyanOutlineButton variant="outlined" disabled={addBrandApiStatus === ApiStates.pending} onClick={handleAddBrand}>
-            {addBrandApiStatus === "pending" ? <GradientCircularProgress color="inherit" /> : <>Add +</>}
+          {/* Input field for entering new variant */}
+          <OutlinedInput size="small" value={newVariant} placeholder="Variant Name" onChange={(e) => setNewVariant(e.target.value)} />
+          {/* Button to add the Variant */}
+          <CyanOutlineButton variant="outlined" disabled={addVariantApiStatus === ApiStates.pending} onClick={handleAddBrand}>
+            {addVariantApiStatus === "pending" ? <GradientCircularProgress color="inherit" /> : <>Add +</>}
           </CyanOutlineButton>
         </Stack>
 
         <Typography variant="body2" gutterBottom fontWeight="bold">
-          Brand List
+          Variany List
         </Typography>
         <div style={{ maxHeight: "400px", overflowY: "auto" }}>
-          {/* {fetchBrandsApiStatus === ApiStates.success ? ( */}
-
           <TableContainer component={Paper}>
             {/* All Order Table */}
             <Table aria-label="customized table">
               <TableHead>
                 <TableRow sx={{ backgroundColor: primaryMediumColor }}>
-                  <SmallStyledTableCell>DATE</SmallStyledTableCell>
-                  <SmallStyledTableCell align="right">BRAND</SmallStyledTableCell>
+                  <SmallStyledTableCell>Variant</SmallStyledTableCell>
+                  <SmallStyledTableCell align="right">Actions</SmallStyledTableCell>
                 </TableRow>
               </TableHead>
               <TableBody>
-                {brandInfo?.length ? (
-                  brandInfo.map((item) => (
+                {variantInfo?.length ? (
+                  variantInfo.map((item) => (
                     <StyledTableRow key={item._id}>
                       <StyledTableCell>
-                        <Typography variant="body2">{item.name}</Typography>
+                        <Typography variant="body2">{item.variant}</Typography>
                       </StyledTableCell>
                       <StyledTableCell align="right">
-                        <Button onClick={() => BrandDeleteHandler(item._id)}>
+                        <Button onClick={() => VariantDeleteHandler(item._id)}>
                           <Typography variant="body2" color={RedColor}>
                             <DeleteIcon />
                           </Typography>
@@ -116,8 +115,8 @@ const BrandModal = () => {
           </TableContainer>
         </div>
       </BasicModal>
-    </>
+    </div>
   );
 };
 
-export default BrandModal;
+export default VariantModal;

@@ -9,6 +9,8 @@ import CategoryModal from "./Modals/CategoryModal";
 import { fetchBrands } from "../../apis/brands";
 import { fetchCategories } from "../../apis/categories";
 import PurchaseEntryModal from "./Modals/PurchaseEntryModal";
+import VariantModal from "./Modals/VariantModal";
+import { fetchVariants } from "../../apis/variants";
 
 const StockManagement = () => {
   const dispatch = useDispatch();
@@ -18,6 +20,7 @@ const StockManagement = () => {
     dispatch(fetchPurchaseList());
     dispatch(fetchBrands());
     dispatch(fetchCategories());
+    dispatch(fetchVariants());
   }, [dispatch, deleteBrandApiStatus]);
   return (
     <Container maxWidth="xl">
@@ -25,6 +28,7 @@ const StockManagement = () => {
         <Stack direction={"row"} gap={3}>
           <BrandModal />
           <CategoryModal />
+          <VariantModal />
         </Stack>
         <Typography variant="h5" gutterBottom fontWeight="bold" align="center">
           Purchase Management
