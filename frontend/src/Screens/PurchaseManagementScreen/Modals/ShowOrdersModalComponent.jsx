@@ -1,13 +1,4 @@
-import {
-  Typography,
-  Table,
-  TableBody,
-  TableCell,
-  TableContainer,
-  TableHead,
-  TableRow,
-  Paper,
-} from "@mui/material";
+import { Typography, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper } from "@mui/material";
 import React, { useState } from "react";
 import { CyanOutlineButton } from "../../../shared/sharedStyles";
 import BasicModal from "../../../shared/BasicModal";
@@ -32,12 +23,7 @@ const ShowOrdersModalComponent = (props) => {
           {props.label}
         </CyanOutlineButton>
       </Typography>
-      <BasicModal
-        open={openModal}
-        handleClose={handleCloseModal}
-        minWidth={400}
-        maxWidth={400}
-      >
+      <BasicModal open={openModal} handleClose={handleCloseModal} minWidth={400} maxWidth={400}>
         <Typography variant="body1" fontWeight="bold">
           Order Details
         </Typography>
@@ -64,15 +50,7 @@ const ShowOrdersModalComponent = (props) => {
 
               <TableRow>
                 <TableCell colSpan={2} align="right">
-                  <Typography
-                    fontWeight="bold"
-                    variant="body2"
-                    color={
-                      props.qty === props.ordered_qty
-                        ? GreenColor
-                        : primaryMediumColor
-                    }
-                  >
+                  <Typography fontWeight="bold" variant="body2" color={props.qty === props.ordered_qty ? GreenColor : primaryMediumColor}>
                     {props.ordered_qty} / {props.qty}
                   </Typography>
                 </TableCell>

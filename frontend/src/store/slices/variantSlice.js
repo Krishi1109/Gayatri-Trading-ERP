@@ -22,7 +22,7 @@ const variantSlice = createSlice({
     },
   },
   extraReducers: (builder) => {
-    // Fetch All Brands
+    // Fetch All Units
     builder.addCase(fetchVariants.pending, (state) => {
       state.fetchVariantsApiStatus = ApiStates.pending;
     });
@@ -34,7 +34,7 @@ const variantSlice = createSlice({
       state.fetchVariantsApiStatus = ApiStates.failed;
     });
 
-    // Add brand
+    // Add Unit
     builder.addCase(addVariant.pending, (state) => {
       state.addVariantApiStatus = ApiStates.pending;
       state.error = "";
@@ -50,7 +50,7 @@ const variantSlice = createSlice({
       state.success = "";
     });
 
-    // delete Brand
+    // delete Unit
     builder.addCase(deleteVariant.pending, (state) => {
       state.deleteVariantApiStatus = ApiStates.pending;
       state.success = "";

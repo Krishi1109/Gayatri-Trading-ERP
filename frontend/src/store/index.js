@@ -7,6 +7,7 @@ import purchaseSlice from "./slices/purchaseSlice";
 import brandSlice from "./slices/brandSlice";
 import categorySlice from "./slices/categorySlice";
 import variantSlice from "./slices/variantSlice";
+import unitSlice from "./slices/unitSlice";
 
 const persistConfig = {
   key: "root",
@@ -27,6 +28,7 @@ const rootReducer = combineReducers({
   brands: brandSlice.reducer,
   categories: categorySlice.reducer,
   variants: variantSlice.reducer,
+  units: unitSlice.reducer,
 });
 
 const persistedReducer = persistReducer(persistConfig, rootReducer);

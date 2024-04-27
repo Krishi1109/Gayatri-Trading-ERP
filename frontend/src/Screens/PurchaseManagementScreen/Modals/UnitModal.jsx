@@ -1,28 +1,29 @@
 import { Alert, Button, IconButton, OutlinedInput, Paper, Stack, Table, TableBody, TableContainer, TableHead, TableRow, Typography } from "@mui/material";
 import React, { useEffect, useState } from "react";
 import { CyanFillButton, CyanOutlineButton } from "../../../shared/sharedStyles";
-import BasicModal from "../../../shared/BasicModal";
 import AddIcon from "@mui/icons-material/Add";
-import { ApiStates, RedColor, primaryMediumColor } from "../../../shared/constants";
+import BasicModal from "../../../shared/BasicModal";
 import { useDispatch, useSelector } from "react-redux";
-import { resetFields } from "../../../store/slices/categorySlice";
+import { ApiStates, RedColor, primaryMediumColor } from "../../../shared/constants";
+import { addUnit, deleteUnit, fetchUnits } from "../../../apis/unit"; // Import the addBrand action creator
+import GradientCircularProgress from "../../../components/loader";
+import { resetUnitFields } from "../../../store/slices/unitSlice";
 import { SmallStyledTableCell, StyledTableCell, StyledTableRow } from "../purchaseManagement.styled";
 import DeleteIcon from "@mui/icons-material/Delete";
-import GradientCircularProgress from "../../../components/loader";
-import { addCategory, deleteCategory, fetchCategories } from "../../../apis/categories";
 
-const CategoryModal = () => {
+const UnitModal = () => {
   const dispatch = useDispatch();
-  const [openModal, setOpenModal] = useState(false);
-  const [newCategoryName, setNewCategoryName] = useState(""); // State to hold the new category name
 
-  const { categoryInto, addCategoryApiStatus, error, success, deleteCategoryApiStatus } = useSelector((state) => state.categories);
+  const [openModal, setOpenModal] = useState(false);
+  const [newUnit, setNewUnit] = useState("");
+
+  const { unitInfo, addUnitApiStatus, error, success, deleteUnitApiStatus } = useSelector((state) => state.units);
 
   useEffect(() => {
-    if (addCategoryApiStatus === ApiStates.success || deleteCategoryApiStatus === ApiStates.success) {
-      dispatch(fetchCategories());
+    if (addUnitApiStatus === ApiStates.success || deleteUnitApiStatus === ApiStates.success) {
+      dispatch(fetchUnits());
     }
-  }, [dispatch, addCategoryApiStatus, deleteCategoryApiStatus]);
+  }, [dispatch, addUnitApiStatus, deleteUnitApiStatus]);
 
   const handleOpenModal = () => {
     setOpenModal(true);
@@ -30,24 +31,25 @@ const CategoryModal = () => {
 
   const handleCloseModal = () => {
     setOpenModal(false);
-    dispatch(resetFields());
+    dispatch(resetUnitFields());
   };
 
-  const handleAddCategory = () => {
-    dispatch(addCategory({ name: newCategoryName }));
-    setNewCategoryName("");
+  const handleAddBrand = () => {
+    dispatch(addUnit({ unit: newUnit }));
+    setNewUnit("");
   };
-  const CategoryDeleteHandler = (id) => {
-    dispatch(deleteCategory({ id }));
+
+  const UnittDeleteHandler = (id) => {
+    dispatch(deleteUnit({ id }));
   };
 
   return (
-    <>
+    <div>
       <Typography variant="body2" fontWeight="bold">
         <CyanFillButton onClick={handleOpenModal}>
           <Typography fontWeight="bold" variant="subtitle1">
-            Category
-          </Typography>{" "}
+            Units
+          </Typography>
           <AddIcon />
         </CyanFillButton>
       </Typography>
@@ -64,21 +66,20 @@ const CategoryModal = () => {
             {success}
           </Alert>
         ) : null}
-
         <Typography variant="body1" gutterBottom fontWeight="bold" textAlign="center">
-          Category Details
+          Units Details
         </Typography>
         <Stack direction="row" sx={{ py: 3 }} justifyContent="space-between">
-          {/* Input field for entering new category name */}
-          <OutlinedInput size="small" value={newCategoryName} placeholder="Category Name" onChange={(e) => setNewCategoryName(e.target.value)} />
-          {/* Button to add the category */}
-          <CyanOutlineButton variant="outlined" disabled={addCategoryApiStatus === ApiStates.pending} onClick={handleAddCategory}>
-            {addCategoryApiStatus === "pending" ? <GradientCircularProgress color="inherit" /> : <>Add +</>}
+          {/* Input field for entering new Unit */}
+          <OutlinedInput size="small" value={newUnit} placeholder="Unit" onChange={(e) => setNewUnit(e.target.value)} />
+          {/* Button to add the Unit */}
+          <CyanOutlineButton variant="outlined" disabled={addUnitApiStatus === ApiStates.pending} onClick={handleAddBrand}>
+            {addUnitApiStatus === "pending" ? <GradientCircularProgress color="inherit" /> : <>Add +</>}
           </CyanOutlineButton>
         </Stack>
 
         <Typography variant="body2" gutterBottom fontWeight="bold">
-          Category List
+          Unit List
         </Typography>
         <div style={{ maxHeight: "400px", overflowY: "auto" }}>
           <TableContainer component={Paper}>
@@ -86,19 +87,19 @@ const CategoryModal = () => {
             <Table aria-label="customized table">
               <TableHead>
                 <TableRow sx={{ backgroundColor: primaryMediumColor }}>
-                  <SmallStyledTableCell>DATE</SmallStyledTableCell>
-                  <SmallStyledTableCell align="right">BRAND</SmallStyledTableCell>
+                  <SmallStyledTableCell>Unit</SmallStyledTableCell>
+                  <SmallStyledTableCell align="right">Actions</SmallStyledTableCell>
                 </TableRow>
               </TableHead>
               <TableBody>
-                {categoryInto?.length ? (
-                  categoryInto.map((item) => (
+                {unitInfo?.length ? (
+                  unitInfo.map((item) => (
                     <StyledTableRow key={item._id}>
                       <StyledTableCell>
-                        <Typography variant="body2">{item.name}</Typography>
+                        <Typography variant="body2">{item.unit}</Typography>
                       </StyledTableCell>
                       <StyledTableCell align="right">
-                        <Button onClick={() => CategoryDeleteHandler(item._id)}>
+                        <Button onClick={() => UnittDeleteHandler(item._id)}>
                           <Typography variant="body2" color={RedColor}>
                             <DeleteIcon />
                           </Typography>
@@ -114,8 +115,8 @@ const CategoryModal = () => {
           </TableContainer>
         </div>
       </BasicModal>
-    </>
+    </div>
   );
 };
 
-export default CategoryModal;
+export default UnitModal;
