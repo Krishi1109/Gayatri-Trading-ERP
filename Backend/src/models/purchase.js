@@ -8,7 +8,7 @@ const purchaseSchema = new mongoose.Schema(
   {
     brand: { type: String, required: true },
     category: { type: String, required: true },
-    weight: { type: Number, required: true },
+    variant: { type: Number, required: true },
     unit: { type: String, required: true },
     items_per_package: { type: Number, required: true },
     price: { type: Number, required: true },

@@ -28,7 +28,7 @@ const ShowOrdersModalComponent = (props) => {
           Order Details
         </Typography>
         {/* Display order details in a table format */}
-        <TableContainer component={Paper} sx={{ my: 2 }}>
+        <TableContainer component={Paper} sx={{ my: 2, overflowY: 'auto' }}> {/* Add overflowY: 'auto' */}
           <Table>
             <TableHead>
               <TableRow>

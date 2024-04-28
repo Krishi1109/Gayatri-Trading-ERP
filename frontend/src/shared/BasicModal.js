@@ -17,6 +17,8 @@ const BasicModal = ({ open, handleClose, children, maxWidth, minWidth }) => {
     border: "2px solid #000",
     boxShadow: 24,
     p: 4,
+    maxHeight: "90vh",
+    overflowX: "auto",
   };
   return (
     <>
