@@ -12,6 +12,7 @@ import PurchaseEntryModal from "./Modals/PurchaseEntryModal";
 import VariantModal from "./Modals/VariantModal";
 import { fetchVariants } from "../../apis/variants";
 import UnitModal from "./Modals/UnitModal";
+import { fetchUnits } from "../../apis/unit";
 
 const StockManagement = () => {
   const dispatch = useDispatch();
@@ -23,6 +24,7 @@ const StockManagement = () => {
     dispatch(fetchBrands());
     dispatch(fetchCategories());
     dispatch(fetchVariants());
+    dispatch(fetchUnits())
   }, [dispatch, deleteBrandApiStatus]);
   return (
     <Container maxWidth="xl">

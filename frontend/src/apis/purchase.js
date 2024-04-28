@@ -3,7 +3,6 @@ import { API } from "../utils";
 
 export const fetchPurchaseList = createAsyncThunk("fetchPurchaseList", async (_, { rejectWithValue }) => {
   try {
-    console.log("HEllo")
     const response = await API.GET(`/api/purchase`);
     return response.data.result;
   } catch (error) {
