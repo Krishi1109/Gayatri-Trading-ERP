@@ -33,7 +33,6 @@ export const deleteCategory = createAsyncThunk(
   "deleteCategory",
   async ({ id }, { rejectWithValue }) => {
     try {
-      console.log("id => ", id)
       const response = await API.DELETE(`/api/category/${id}`);
       return response.data;
     } catch (error) {

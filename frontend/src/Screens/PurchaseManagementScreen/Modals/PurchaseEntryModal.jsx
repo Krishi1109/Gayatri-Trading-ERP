@@ -153,7 +153,7 @@ const PurchaseEntryModal = (props) => {
               size="small"
               disablePortal
               id="unit"
-              options={unitInfo.map((r) => r.unit)}
+              options={unitInfo?.map((r) => r.unit)}
               value={values.unit}
               onChange={(e, value) => {
                 setFieldValue("unit", value);

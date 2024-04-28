@@ -59,7 +59,6 @@ const PurchaseListTable = () => {
 
     if (status) {
       filteredData = filteredData.filter((item) => {
-        console.log("status => ", status);
         return item.status && item.status.toLowerCase() === `${status.toLowerCase()}`;
       });
     }
