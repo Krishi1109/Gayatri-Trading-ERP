@@ -2,29 +2,29 @@ import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import formatDate from "../../utils/formatDates.js";
 import "../../shared/sharedStyles.js";
-import { TableHead, TableRow, Typography, Autocomplete, TextField, Stack } from "@mui/material";
+import { TableHead, TableRow, Typography, Autocomplete, TextField, Stack, Button } from "@mui/material";
 import Paper from "@mui/material/Paper";
 import TableContainer from "@mui/material/TableContainer";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
 import Pagination from "@mui/material/Pagination";
 import { StyledTableCell, StyledTableRow, getStatusColor } from "./purchaseManagement.styled.js";
-import { CyanOutlineButton } from "../../shared/sharedStyles.js";
 import ShowOrdersModalComponent from "./Modals/ShowOrdersModalComponent.jsx";
-import { GrayColor } from "../../shared/constants.js";
+import { GrayColor, RedColor, purchaseOrderStatus } from "../../shared/constants.js";
+import DeleteIcon from "@mui/icons-material/Delete";
+import AddPurchaseQtyModal from "./Modals/AddPurchaseQtyModal.jsx";
 
 const PurchaseListTable = () => {
   const { purchaseInfo } = useSelector((state) => state.purchase);
+  const { brandInfo } = useSelector((state) => state.brands);
+  const { categoryInto } = useSelector((state) => state.categories);
+
   const [tableData, setTableData] = useState(purchaseInfo);
   const [page, setPage] = useState(1);
   const [selectedBrand, setSelectedBrand] = useState("");
   const [selectedCategory, setSelectedCategory] = useState("");
+  const [selectedPurchaseOrderStatus, setSelectedPurchaseOrderStatus] = useState("");
   const rowsPerPage = 10;
-
-  const { brandInfo } = useSelector((state) => state.brands);
-  const { categoryInto, addCategoryApiStatus } = useSelector((state) => state.categories);
-
-  console.log(categoryInto);
 
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
@@ -33,16 +33,21 @@ const PurchaseListTable = () => {
   const handleBrandFilter = (event, value) => {
     setSelectedBrand(value);
   };
+
   const handleCategoryFilter = (event, value) => {
     setSelectedCategory(value);
   };
-  useEffect(() => {
-    filterData(selectedBrand, selectedCategory);
-  }, [selectedBrand, selectedCategory]);
 
-  const filterData = (brand, category) => {
+  const handlePurchaseOrderStatusFilter = (event, value) => {
+    setSelectedPurchaseOrderStatus(value);
+  };
+
+  useEffect(() => {
+    filterData(selectedBrand, selectedCategory, selectedPurchaseOrderStatus);
+  }, [selectedBrand, selectedCategory, selectedPurchaseOrderStatus, purchaseInfo]);
+
+  const filterData = (brand, category, status) => {
     let filteredData = purchaseInfo;
-    console.log("sdfsdf", brand);
 
     if (brand) {
       filteredData = filteredData.filter((item) => item.brand && item.brand.toLowerCase().includes(brand.toLowerCase()));
@@ -50,6 +55,13 @@ const PurchaseListTable = () => {
 
     if (category) {
       filteredData = filteredData.filter((item) => item.category && item.category.toLowerCase().includes(category.toLowerCase()));
+    }
+
+    if (status) {
+      filteredData = filteredData.filter((item) => {
+        console.log("status => ", status);
+        return item.status && item.status.toLowerCase() === `${status.toLowerCase()}`;
+      });
     }
 
     setTableData(filteredData);
@@ -84,6 +96,19 @@ const PurchaseListTable = () => {
             value={selectedCategory}
             sx={{ width: 200 }}
             renderInput={(params) => <TextField {...params} label="Category" />}
+          />
+        </div>
+
+        <div>
+          <Autocomplete
+            size="small"
+            disablePortal
+            id="text-btrand"
+            options={purchaseOrderStatus.map((r) => r.label)}
+            onChange={(e, value) => handlePurchaseOrderStatusFilter(e, value)}
+            value={selectedPurchaseOrderStatus}
+            sx={{ width: 200 }}
+            renderInput={(params) => <TextField {...params} label="Status" />}
           />
         </div>
       </Stack>
@@ -125,7 +150,7 @@ const PurchaseListTable = () => {
                 </StyledTableCell>
                 <StyledTableCell>
                   <Typography variant="body2" fontWeight="bold">
-                    {item.weight} {item.unit}
+                    {item.variant} {item.unit}
                     <span style={{ color: `${GrayColor}` }}> X {item.items_per_package}</span>
                   </Typography>
                 </StyledTableCell>
@@ -153,7 +178,14 @@ const PurchaseListTable = () => {
                   </Typography>
                 </StyledTableCell>
                 <StyledTableCell>
-                  <CyanOutlineButton variant="outlined">Demo</CyanOutlineButton>
+                  <Stack direction="row">
+                    <AddPurchaseQtyModal id={item?._id} />
+                    <Button sx={{ px: 0 }}>
+                      <Typography variant="body2" color={RedColor}>
+                        <DeleteIcon />
+                      </Typography>
+                    </Button>
+                  </Stack>
                 </StyledTableCell>
               </StyledTableRow>
             ))}

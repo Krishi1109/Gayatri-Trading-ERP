@@ -17,6 +17,7 @@ const StockManagement = () => {
   const dispatch = useDispatch();
 
   const { deleteBrandApiStatus } = useSelector((state) => state.brands);
+
   useEffect(() => {
     dispatch(fetchPurchaseList());
     dispatch(fetchBrands());
