@@ -44,7 +44,12 @@ const PurchaseListTable = () => {
 
   useEffect(() => {
     filterData(selectedBrand, selectedCategory, selectedPurchaseOrderStatus);
-  }, [selectedBrand, selectedCategory, selectedPurchaseOrderStatus, purchaseInfo]);
+  }, [purchaseInfo]);
+
+  useEffect(() => {
+    filterData(selectedBrand, selectedCategory, selectedPurchaseOrderStatus);
+    setPage(1);
+  }, [selectedBrand, selectedCategory, selectedPurchaseOrderStatus]);
 
   const filterData = (brand, category, status) => {
     let filteredData = purchaseInfo;
@@ -64,7 +69,7 @@ const PurchaseListTable = () => {
     }
 
     setTableData(filteredData);
-    setPage(1); // Reset page when applying filter
+    // setPage(1); // Reset page when applying filter
   };
 
   const slicedData = tableData.slice((page - 1) * rowsPerPage, page * rowsPerPage);
