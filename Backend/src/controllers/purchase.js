@@ -1,6 +1,7 @@
 import ErrorHandler from "../utils/errorHandler";
 import Purchase from "../models/purchase";
 import { StatusCodes } from "http-status-codes";
+import purchaseServices from "../services/purchase.services";
 
 const addPurchase = async (req, res, next) => {
   try {
@@ -30,14 +31,14 @@ const fetchPurchaseList = async (req, res, next) => {
   }
 };
 
-// Just for the demo purpose 
+// Just for the demo purpose
 const filteredPurchaseList = async (req, res, next) => {
   try {
     const { brand, category, status } = req.query;
     const purchaseList = await Purchase.find();
     let filteredResult = purchaseList;
     filteredResult = await purchaseList.filter(
-      (item) => (item.category && item.category === category) && (item.status && item.status === status) & (item.brand && item.brand === brand)
+      (item) => item.category && item.category === category && (item.status && item.status === status) & (item.brand && item.brand === brand)
     );
     if (brand) {
       filteredResult = filteredResult.filter((item) => item.brand === brand);
@@ -93,11 +94,26 @@ const editOrderInPurchaseList = async (req, res, next) => {
   }
 };
 
+// get purchase data for different status to show on the dashboard
+const purchaseOrderAnalysisByStatus = async (req, res, next) => {
+  try {
+    const { year } = req.headers;
+    const response = await purchaseServices.purchaseAmountByStatus(year);
+    res.status(response.status ?? StatusCodes.OK).send({
+      success: response.success,
+      message: response.message,
+      result: response?.result,
+    });
+  } catch (error) {
+    return next(new ErrorHandler(error.message ?? Constants.defaultMessage, StatusCodes.INTERNAL_SERVER_ERROR));
+  }
+};
 const purchaseController = {
   addPurchase,
   fetchPurchaseList,
   editOrderInPurchaseList,
   filteredPurchaseList,
+  purchaseOrderAnalysisByStatus,
 };
 
 export default purchaseController;

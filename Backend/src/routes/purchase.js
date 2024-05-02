@@ -12,4 +12,7 @@ router.route("/filter").get(authMiddleware.authentication, purchaseController.fi
 
 router.route("/:id").put(authMiddleware.authentication, purchaseController.editOrderInPurchaseList);
 
+// get data of purchase order according to its status, to show this data at the dashboard
+router.route("/analysis/purchase-order-amount").get(authMiddleware.authentication, purchaseController.purchaseOrderAnalysisByStatus);
+
 export default router;
