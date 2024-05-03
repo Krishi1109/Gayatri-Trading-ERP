@@ -1,12 +1,14 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { ApiStates } from "../../shared/constants";
-import { addPurchaseEntry, fetchPurchaseList, addPurchaseOrderQty } from "../../apis/purchase";
+import { addPurchaseEntry, fetchPurchaseList, addPurchaseOrderQty, fetchPurchaseAnalysisByStatus } from "../../apis/purchase";
 
 const initialState = {
   purchaseApiStatus: ApiStates.idle,
   purchaseInfo: [],
   purchaseEntryApiStatus: ApiStates.idle,
   addPurchaseOrderQtyApiStatus: ApiStates.idle,
+  purchaseAnalysisByStatusApiStatus: ApiStates.idle,
+  purchaseAnalysisByStatusData: [],
   success: "",
   error: "",
 };
@@ -68,6 +70,22 @@ const purchaseSlice = createSlice({
     builder.addCase(addPurchaseOrderQty.rejected, (state, action) => {
       state.addPurchaseOrderQtyApiStatus = ApiStates.failed;
       state.error = action.payload.message;
+      state.success = "";
+    });
+
+    // Purchase analysis for the landing page - Dash board
+    builder.addCase(fetchPurchaseAnalysisByStatus.pending, (state) => {
+      state.purchaseAnalysisByStatusApiStatus = ApiStates.pending;
+      state.error = "";
+      state.success = "";
+    });
+    builder.addCase(fetchPurchaseAnalysisByStatus.fulfilled, (state, action) => {
+      state.purchaseAnalysisByStatusApiStatus = ApiStates.success;
+      state.purchaseAnalysisByStatusData = action.payload;
+    });
+    builder.addCase(fetchPurchaseAnalysisByStatus.rejected, (state, action) => {
+      state.purchaseAnalysisByStatusApiStatus = ApiStates.failed;
+      state.error = action.payload?.message;
       state.success = "";
     });
   },

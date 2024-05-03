@@ -21,9 +21,17 @@ export const addPurchaseEntry = createAsyncThunk("addPurchaseEntry", async (valu
 
 export const addPurchaseOrderQty = createAsyncThunk("addPurchaseOrderQty", async ({ id, values }, { rejectWithValue }) => {
   try {
-    console.log(values)
     const response = await API.PUT(`/api/purchase/${id}`, values);
     return response.data;
+  } catch (error) {
+    return rejectWithValue(error);
+  }
+});
+
+export const fetchPurchaseAnalysisByStatus = createAsyncThunk("fetchPurchaseAnalysisByStatus", async (_, { rejectWithValue }) => {
+  try {
+    const response = await API.GET(`/api/purchase/analysis/purchase-order-amount`);
+    return response.data.result;
   } catch (error) {
     return rejectWithValue(error);
   }

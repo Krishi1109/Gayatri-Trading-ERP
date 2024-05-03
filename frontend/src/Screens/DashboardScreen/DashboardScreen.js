@@ -4,16 +4,21 @@ import { Container, Stack, Box, Autocomplete, TextField, Typography } from "@mui
 import DisplayCard from "./DisplayCard";
 import BrandPieChart from "./Graphs/BrandPieChart";
 import { years } from "../../shared/constants";
+import { useDispatch, useSelector } from "react-redux";
+import { fetchPurchaseAnalysisByStatus } from "../../apis/purchase";
 
 const DashboardScreen = () => {
+  const dispatch = useDispatch();
   const [selectedYear, setSelectedYear] = useState(null);
 
+  const { purchaseAnalysisByStatusData } = useSelector((state) => state.purchase);
+  // dispatch(fetchPurchaseAnalysisByStatus(selectedYear));
+
   useEffect(() => {
-    if (selectedYear) {
-      // Call your API here using the selectedYear value
-      console.log(`API called with year: ${selectedYear}`);
-    }
-  }, [selectedYear]);
+    console.log("Hello");
+    dispatch(fetchPurchaseAnalysisByStatus());
+  }, [dispatch]);
+
   return (
     <Container>
       <Stack direction={"row"} justifyContent={"space-between"} alignItems={"center"}>
@@ -28,14 +33,29 @@ const DashboardScreen = () => {
           }}
           renderInput={(params) => <TextField {...params} label="Select Year" variant="outlined" fullWidth />}
         />
-        <Typography variant="h6" >ADMIN PANEL</Typography>
+        <Typography variant="h6">ADMIN PANEL</Typography>
       </Stack>
 
-      <Stack direction="row" alignItems="center" justifyContent={"space-between"} sx={{ mb: 4 }}>
-        <DisplayCard mainHeading={"All Orders"} year={selectedYear} />
-        <DisplayCard mainHeading={"Active Orders"} year={selectedYear} />
-        <DisplayCard mainHeading={"Pending Orders"} year={selectedYear} />
-        <DisplayCard mainHeading={"Completed Orders"} year={selectedYear} />
+      <Stack
+        direction="row"
+        alignItems="center"
+        justifyContent="space-between"
+        sx={{
+          mb: 4,
+          flexWrap: "wrap", // Enable wrapping
+          gap: 2,
+        }}
+      >
+        {purchaseAnalysisByStatusData ? (
+          <>
+            {purchaseAnalysisByStatusData.map((item, key) => (
+              <DisplayCard key={key} mainHeading={item.status} year={selectedYear} amount={item.totalAmount} count={item.count} />
+            ))}
+          </>
+        ) : (
+          // Optionally, you can render something else when there's no data
+          <p>No data available</p>
+        )}
       </Stack>
       <Stack direction={"row"} width="100%" alignItems="center">
         <Box width="70%">
