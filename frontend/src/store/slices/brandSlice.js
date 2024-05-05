@@ -18,6 +18,7 @@ const brandSlice = createSlice({
     resetFields: (state) => {
       state.error = "";
       state.addBrandApiStatus = ApiStates.idle;
+      state.deleteBrandApiStatus = ApiStates.idle;
       state.success = "";
     },
   },
@@ -53,15 +54,15 @@ const brandSlice = createSlice({
     // delete Brand
     builder.addCase(deleteBrand.pending, (state) => {
       state.deleteBrandApiStatus = ApiStates.pending;
-      state.success = ""
+      state.success = "";
     });
-    builder.addCase(deleteBrand.fulfilled, (state,action) => {
+    builder.addCase(deleteBrand.fulfilled, (state, action) => {
       state.deleteBrandApiStatus = ApiStates.success;
-      state.success = action.payload.message
+      state.success = action.payload.message;
     });
     builder.addCase(deleteBrand.rejected, (state) => {
       state.deleteBrandApiStatus = ApiStates.failed;
-      state.success = ""
+      state.success = "";
     });
   },
 });

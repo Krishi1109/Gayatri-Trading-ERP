@@ -18,7 +18,7 @@ const DisplayCard = ({ mainHeading, year, amount, count }) => {
             {year ? year : "Overall"} {count}
           </Typography>
           <Typography variant="h6" sx={{ color: "#4caf50", fontWeight: 600 }}>
-            ₹{amount}
+            {amount}
           </Typography>
         </CardContent>
         <CardActions></CardActions>

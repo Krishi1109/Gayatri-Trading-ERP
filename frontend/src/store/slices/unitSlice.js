@@ -18,6 +18,7 @@ const unitSlice = createSlice({
     resetUnitFields: (state) => {
       state.error = "";
       state.addUnitApiStatus = ApiStates.idle;
+      state.deleteUnitApiStatus = ApiStates.idle;
       state.success = "";
     },
   },

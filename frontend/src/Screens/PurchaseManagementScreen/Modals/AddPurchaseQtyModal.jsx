@@ -18,7 +18,9 @@ const AddPurchaseQtyModal = ({ id }) => {
   const { error, success, addPurchaseOrderQtyApiStatus } = useSelector((state) => state.purchase);
 
   useEffect(() => {
-    dispatch(fetchPurchaseList());
+    if (addPurchaseOrderQtyApiStatus === ApiStates.success) {
+      dispatch(fetchPurchaseList());
+    }
   }, [dispatch, addPurchaseOrderQtyApiStatus]);
 
   const handleOpenModal = () => {

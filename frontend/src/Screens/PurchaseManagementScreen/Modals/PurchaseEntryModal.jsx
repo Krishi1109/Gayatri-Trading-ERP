@@ -55,6 +55,7 @@ const PurchaseEntryModal = (props) => {
   useEffect(() => {
     if (purchaseEntryApiStatus === ApiStates.success) {
       dispatch(fetchPurchaseList());
+      dispatch(resetPurchaseFields());
     }
   }, [purchaseEntryApiStatus, dispatch]);
 

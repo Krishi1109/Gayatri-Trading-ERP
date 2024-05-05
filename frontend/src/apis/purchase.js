@@ -28,9 +28,9 @@ export const addPurchaseOrderQty = createAsyncThunk("addPurchaseOrderQty", async
   }
 });
 
-export const fetchPurchaseAnalysisByStatus = createAsyncThunk("fetchPurchaseAnalysisByStatus", async (_, { rejectWithValue }) => {
+export const fetchPurchaseAnalysisByStatus = createAsyncThunk("fetchPurchaseAnalysisByStatus", async (year, { rejectWithValue }) => {
   try {
-    const response = await API.GET(`/api/purchase/analysis/purchase-order-amount`);
+    const response = await API.GET(`/api/purchase/analysis/purchase-order-amount`, year);
     return response.data.result;
   } catch (error) {
     return rejectWithValue(error);
