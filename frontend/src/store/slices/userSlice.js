@@ -5,7 +5,7 @@ import { userLogin } from "../../apis/users";
 const initialState = {
   isAuth: false,
   userInfo: [],
-  loginApistatus: ApiStates.idle,
+  loginApiStatus: ApiStates.idle,
 };
 
 const authSlice = createSlice({
@@ -17,16 +17,16 @@ const authSlice = createSlice({
   extraReducers: (builder) => {
     builder
       .addCase(userLogin.pending, (state) => {
-        state.loginApistatus = ApiStates.pending;
+        state.loginApiStatus = ApiStates.pending;
       })
       .addCase(userLogin.fulfilled, (state, action) => {
-        state.loginApistatus = ApiStates.success;
+        state.loginApiStatus = ApiStates.success;
         state.isAuth = true;
         state.userInfo = action.payload;
         localStorage.setItem("token", action.payload.result.token)
       })
       .addCase(userLogin.rejected, (state) => {
-        state.loginApistatus = ApiStates.failed;
+        state.loginApiStatus = ApiStates.failed;
       });
   },
 });

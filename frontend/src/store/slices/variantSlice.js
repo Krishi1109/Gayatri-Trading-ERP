@@ -18,6 +18,7 @@ const variantSlice = createSlice({
     resetVariantFields: (state) => {
       state.error = "";
       state.addVariantApiStatus = ApiStates.idle;
+      state.deleteVariantApiStatus = ApiStates.idle;
       state.success = "";
     },
   },

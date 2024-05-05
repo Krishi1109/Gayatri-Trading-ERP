@@ -13,7 +13,6 @@ import DeleteIcon from "@mui/icons-material/Delete";
 
 const VariantModal = () => {
   const dispatch = useDispatch();
-
   const [openModal, setOpenModal] = useState(false);
   const [newVariant, setNewVariant] = useState("");
 

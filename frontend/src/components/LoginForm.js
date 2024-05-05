@@ -8,7 +8,7 @@ import * as Yup from "yup";
 const LoginForm = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate()
-  const {loginApistatus} = useSelector((state) => state.auth)
+  const {loginApiStatus} = useSelector((state) => state.auth)
 
   const { values, handleSubmit, handleChange, handleBlur, errors, touched } = useFormik({
     initialValues: {
@@ -73,9 +73,9 @@ const LoginForm = () => {
               className="bg-cyan-500 hover:bg-cyan-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
               type="button"
               onClick={() => handleSubmit()}
-              disabled={loginApistatus === 'pending'} // Disable the button when the API call is pending
+              disabled={loginApiStatus === 'pending'} // Disable the button when the API call is pending
             >
-              {loginApistatus === 'pending' ? "Signing in..." : "Sign In"} 
+              {loginApiStatus === 'pending' ? "Signing in..." : "Sign In"} 
             </button>
           </div>
         </form>

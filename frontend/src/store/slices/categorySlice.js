@@ -3,7 +3,7 @@ import { ApiStates } from "../../shared/constants";
 import { addCategory, deleteCategory, fetchCategories } from "../../apis/categories";
 
 const initialState = {
-  fetchCategorysApiStatus: ApiStates.idle,
+  fetchCategoryApiStatus: ApiStates.idle,
   categoryInto: [],
   addCategoryApiStatus: ApiStates.idle,
   error: "",
@@ -18,20 +18,21 @@ const categorySlice = createSlice({
     resetFields: (state) => {
       state.error = "";
       state.addCategoryApiStatus = ApiStates.idle;
+      state.deleteCategoryApiStatus = ApiStates.idle;
       state.success = "";
     },
   },
   extraReducers: (builder) => {
-    // Fetch All Categorys
+    // Fetch All Category
     builder.addCase(fetchCategories.pending, (state) => {
-      state.fetchCategorysApiStatus = ApiStates.pending;
+      state.fetchCategoryApiStatus = ApiStates.pending;
     });
     builder.addCase(fetchCategories.fulfilled, (state, action) => {
-      state.fetchCategorysApiStatus = ApiStates.success;
+      state.fetchCategoryApiStatus = ApiStates.success;
       state.categoryInto = action.payload;
     });
     builder.addCase(fetchCategories.rejected, (state) => {
-      state.fetchCategorysApiStatus = ApiStates.failed;
+      state.fetchCategoryApiStatus = ApiStates.failed;
     });
 
     // Add category
@@ -53,15 +54,15 @@ const categorySlice = createSlice({
     // delete Category
     builder.addCase(deleteCategory.pending, (state) => {
       state.deleteCategoryApiStatus = ApiStates.pending;
-      state.success = ""
+      state.success = "";
     });
-    builder.addCase(deleteCategory.fulfilled, (state,action) => {
+    builder.addCase(deleteCategory.fulfilled, (state, action) => {
       state.deleteCategoryApiStatus = ApiStates.success;
-      state.success = action.payload.message
+      state.success = action.payload.message;
     });
     builder.addCase(deleteCategory.rejected, (state) => {
       state.deleteCategoryApiStatus = ApiStates.failed;
-      state.success = ""
+      state.success = "";
     });
   },
 });

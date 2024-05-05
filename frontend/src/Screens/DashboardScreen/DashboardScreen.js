@@ -15,9 +15,8 @@ const DashboardScreen = () => {
   // dispatch(fetchPurchaseAnalysisByStatus(selectedYear));
 
   useEffect(() => {
-    console.log("Hello");
-    dispatch(fetchPurchaseAnalysisByStatus());
-  }, [dispatch]);
+    dispatch(fetchPurchaseAnalysisByStatus({ "year": selectedYear }));
+  }, [dispatch, selectedYear]);
 
   return (
     <Container>
@@ -28,6 +27,7 @@ const DashboardScreen = () => {
           sx={{ width: 200, my: 2 }}
           options={years}
           value={selectedYear}
+          getOptionLabel={(option) => option.toString()}
           onChange={(event, newValue) => {
             setSelectedYear(newValue);
           }}

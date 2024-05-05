@@ -1,25 +1,32 @@
 import Purchase from "../models/purchase";
+import formatIndianCurrency from "../utils/formatIndianCurrency";
 
-const purchaseAmountByStatus = async () => {
+const purchaseAmountByStatus = async (year) => {
+  // Conditionally set the $match stage based on whether 'year' is provided
+  let matchCondition = {};
+  if (year) {
+    matchCondition = {
+      $expr: {
+        $eq: [{ $year: "$createdAt" }, parseInt(year)]
+      }
+    };
+  }
+
   const queryResponse = await Purchase.aggregate([
     {
-      $match: {
-        $expr: {
-          $eq: [{ $year: "$createdAt" }, parseInt(2024)], // Filter documents based on the year
-        },
-      },
+      $match: matchCondition
     },
     {
       $group: {
         _id: "$status",
         totalAmount: {
-          $sum: { $multiply: ["$price", "$items_per_package", "$qty"] },
+          $sum: { $multiply: ["$price", "$items_per_package", "$qty"] }
         },
-        count: { $sum: 1 }, // Count the number of documents for each status
+        count: { $sum: 1 }
       },
     },
     {
-      $sort: { _id: 1 }, // Sort by status in ascending order
+      $sort: { _id: 1 }
     },
   ]);
 
@@ -28,18 +35,18 @@ const purchaseAmountByStatus = async () => {
   // Map the array and transform each object
   const transformedData = queryResponse.map((item) => ({
     status: `${item._id.toLowerCase()} orders`,
-    totalAmount: item.totalAmount,
+    totalAmount: formatIndianCurrency(item.totalAmount),
     count: item.count,
   }));
 
   // Add an object representing the sum of totalAmount
   transformedData.push({
     status: "all orders",
-    totalAmount: totalAmountSum,
+    totalAmount: formatIndianCurrency(totalAmountSum),
     count: queryResponse.reduce((sum, item) => sum + item.count, 0),
   });
-
-  return { success: true, message: "Successfully, Fetch total purchase amount by status", result: transformedData };
+  console.log(transformedData);
+  return { success: true, message: "Successfully fetched total purchase amount by status", result: transformedData };
 };
 
 const purchaseServices = {
