@@ -108,12 +108,27 @@ const purchaseOrderAnalysisByStatus = async (req, res, next) => {
     return next(new ErrorHandler(error.message ?? Constants.defaultMessage, StatusCodes.INTERNAL_SERVER_ERROR));
   }
 };
+
+// Get total purchase amount monthly - for dashboard graph
+const purchaseTotalAmountByMonth = async (req, res, next) => {
+  try {
+    const response = await purchaseServices.purchaseTotalAmountByMonth();
+    res.status(response.status ?? StatusCodes.OK).send({
+      success: response.success,
+      message: response.message,
+      result: response?.result,
+    });
+  } catch (error) {
+    return next(new ErrorHandler(error.message ?? Constants.defaultMessage, StatusCodes.INTERNAL_SERVER_ERROR));
+  }
+};
 const purchaseController = {
   addPurchase,
   fetchPurchaseList,
   editOrderInPurchaseList,
   filteredPurchaseList,
   purchaseOrderAnalysisByStatus,
+  purchaseTotalAmountByMonth,
 };
 
 export default purchaseController;

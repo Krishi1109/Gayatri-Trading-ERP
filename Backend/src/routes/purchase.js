@@ -15,4 +15,7 @@ router.route("/:id").put(authMiddleware.authentication, purchaseController.editO
 // get data of purchase order according to its status, to show this data at the dashboard
 router.route("/analysis/purchase-order-amount").get(authMiddleware.authentication, purchaseController.purchaseOrderAnalysisByStatus);
 
+// get purchase amount by month for graph on the dashboard
+router.route("/analysis/purchase-amount-monthly").get(authMiddleware.authentication, purchaseController.purchaseTotalAmountByMonth);
+
 export default router;
