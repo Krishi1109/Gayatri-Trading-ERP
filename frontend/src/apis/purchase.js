@@ -36,3 +36,12 @@ export const fetchPurchaseAnalysisByStatus = createAsyncThunk("fetchPurchaseAnal
     return rejectWithValue(error);
   }
 });
+
+export const fetchPurchaseAmountByMonth = createAsyncThunk("fetchPurchaseAmountByMonth", async (_, { rejectWithValue }) => {
+  try {
+    const response = await API.GET(`/api/purchase/analysis/purchase-amount-monthly`);
+    return response.data.result;
+  } catch (error) {
+    return rejectWithValue(error);
+  }
+});

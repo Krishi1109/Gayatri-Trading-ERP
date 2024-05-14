@@ -80,7 +80,7 @@ const purchaseTotalAmountByMonth = async () => {
   // Map over the allMonths array and fill in missing months with 0 total amount
   const result = allMonths.map((month) => {
     const existingData = monthlyTotalAmounts.find((item) => item.month === month);
-    return existingData ? existingData : { month, totalAmount: 0 };
+    return existingData ? { month: existingData.month, totalAmount: formatIndianCurrency(existingData.totalAmount) } : { month, totalAmount: 0 };
   });
   return { success: true, message: "Successfully fetched total purchase amount by month", result };
 };

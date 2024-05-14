@@ -1,6 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { ApiStates } from "../../shared/constants";
-import { addPurchaseEntry, fetchPurchaseList, addPurchaseOrderQty, fetchPurchaseAnalysisByStatus } from "../../apis/purchase";
+import { addPurchaseEntry, fetchPurchaseList, addPurchaseOrderQty, fetchPurchaseAnalysisByStatus, fetchPurchaseAmountByMonth } from "../../apis/purchase";
 
 const initialState = {
   purchaseApiStatus: ApiStates.idle,
@@ -8,7 +8,9 @@ const initialState = {
   purchaseEntryApiStatus: ApiStates.idle,
   addPurchaseOrderQtyApiStatus: ApiStates.idle,
   purchaseAnalysisByStatusApiStatus: ApiStates.idle,
+  purchaseTotalAmountByMonthApiStatus: ApiStates.idle,
   purchaseAnalysisByStatusData: [],
+  purchaseAmountByMonthData: [],
   success: "",
   error: "",
 };
@@ -85,6 +87,22 @@ const purchaseSlice = createSlice({
     });
     builder.addCase(fetchPurchaseAnalysisByStatus.rejected, (state, action) => {
       state.purchaseAnalysisByStatusApiStatus = ApiStates.failed;
+      state.error = action.payload?.message;
+      state.success = "";
+    });
+
+    // Purchase total amount monthly - Dash board line graph
+    builder.addCase(fetchPurchaseAmountByMonth.pending, (state) => {
+      state.purchaseTotalAmountByMonthApiStatus = ApiStates.pending;
+      state.error = "";
+      state.success = "";
+    });
+    builder.addCase(fetchPurchaseAmountByMonth.fulfilled, (state, action) => {
+      state.purchaseTotalAmountByMonthApiStatus = ApiStates.success;
+      state.purchaseAmountByMonthData = action.payload;
+    });
+    builder.addCase(fetchPurchaseAmountByMonth.rejected, (state, action) => {
+      state.purchaseTotalAmountByMonthApiStatus = ApiStates.failed;
       state.error = action.payload?.message;
       state.success = "";
     });
