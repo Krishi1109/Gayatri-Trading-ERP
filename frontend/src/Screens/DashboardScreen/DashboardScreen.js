@@ -15,7 +15,7 @@ const DashboardScreen = () => {
   // dispatch(fetchPurchaseAnalysisByStatus(selectedYear));
 
   useEffect(() => {
-    dispatch(fetchPurchaseAnalysisByStatus({ "year": selectedYear }));
+    dispatch(fetchPurchaseAnalysisByStatus({ year: selectedYear }));
   }, [dispatch, selectedYear]);
 
   return (
