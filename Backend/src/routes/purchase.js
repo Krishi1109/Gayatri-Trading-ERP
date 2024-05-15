@@ -18,4 +18,6 @@ router.route("/analysis/purchase-order-amount").get(authMiddleware.authenticatio
 // get purchase amount by month for graph on the dashboard
 router.route("/analysis/purchase-amount-monthly").get(authMiddleware.authentication, purchaseController.purchaseTotalAmountByMonth);
 
+// Get total amount for purchase for the all brands, that are available in our Database
+router.route("/analysis/brand-purchase-amount").get(authMiddleware.authentication, purchaseController.brandPurchaseAmount);
 export default router;

@@ -23,7 +23,7 @@ const fetchPurchaseList = async (req, res, next) => {
     const purchaseList = await Purchase.find({}).sort({ createdAt: -1 });
     res.status(StatusCodes.OK).send({
       success: true,
-      message: "Fetch Purchas list successfully!",
+      message: "Fetch Purchase list successfully!",
       result: purchaseList,
     });
   } catch (error) {
@@ -49,7 +49,6 @@ const filteredPurchaseList = async (req, res, next) => {
     if (status) {
       filteredResult = filteredResult.filter((item) => item.status === status);
     }
-    console.log(filteredResult.length);
     res.status(StatusCodes.OK).send({
       success: true,
       message: "Fetch Purchas list successfully!",
@@ -122,6 +121,20 @@ const purchaseTotalAmountByMonth = async (req, res, next) => {
     return next(new ErrorHandler(error.message ?? Constants.defaultMessage, StatusCodes.INTERNAL_SERVER_ERROR));
   }
 };
+
+// Get total amount for purchase for the all brands, that are available in our Database
+const brandPurchaseAmount = async (req, res, next) => {
+  try {
+    const response = await purchaseServices.brandPurchaseAmountService();
+    res.status(response.status ?? StatusCodes.OK).send({
+      success: response.success,
+      message: response.message,
+      result: response?.result,
+    });
+  } catch (error) {
+    return next(new ErrorHandler(error.message ?? Constants.defaultMessage, StatusCodes.INTERNAL_SERVER_ERROR));
+  }
+};
 const purchaseController = {
   addPurchase,
   fetchPurchaseList,
@@ -129,6 +142,7 @@ const purchaseController = {
   filteredPurchaseList,
   purchaseOrderAnalysisByStatus,
   purchaseTotalAmountByMonth,
+  brandPurchaseAmount,
 };
 
 export default purchaseController;

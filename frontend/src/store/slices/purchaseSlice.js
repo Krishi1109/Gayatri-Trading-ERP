@@ -1,6 +1,13 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { ApiStates } from "../../shared/constants";
-import { addPurchaseEntry, fetchPurchaseList, addPurchaseOrderQty, fetchPurchaseAnalysisByStatus, fetchPurchaseAmountByMonth } from "../../apis/purchase";
+import {
+  addPurchaseEntry,
+  fetchPurchaseList,
+  addPurchaseOrderQty,
+  fetchPurchaseAnalysisByStatus,
+  fetchPurchaseAmountByMonth,
+  fetchPurchaseAmountByBrand,
+} from "../../apis/purchase";
 
 const initialState = {
   purchaseApiStatus: ApiStates.idle,
@@ -9,8 +16,10 @@ const initialState = {
   addPurchaseOrderQtyApiStatus: ApiStates.idle,
   purchaseAnalysisByStatusApiStatus: ApiStates.idle,
   purchaseTotalAmountByMonthApiStatus: ApiStates.idle,
+  purchaseTotalAmountByBrandApiStatus: ApiStates.idle,
   purchaseAnalysisByStatusData: [],
   purchaseAmountByMonthData: [],
+  purchaseTotalAmountByBrandData: [],
   success: "",
   error: "",
 };
@@ -103,6 +112,22 @@ const purchaseSlice = createSlice({
     });
     builder.addCase(fetchPurchaseAmountByMonth.rejected, (state, action) => {
       state.purchaseTotalAmountByMonthApiStatus = ApiStates.failed;
+      state.error = action.payload?.message;
+      state.success = "";
+    });
+
+    // Purchase total amount by Brand - Dash board pie graph
+    builder.addCase(fetchPurchaseAmountByBrand.pending, (state) => {
+      state.purchaseTotalAmountByBrandApiStatus = ApiStates.pending;
+      state.error = "";
+      state.success = "";
+    });
+    builder.addCase(fetchPurchaseAmountByBrand.fulfilled, (state, action) => {
+      state.purchaseTotalAmountByBrandApiStatus = ApiStates.success;
+      state.purchaseTotalAmountByBrandData = action.payload;
+    });
+    builder.addCase(fetchPurchaseAmountByBrand.rejected, (state, action) => {
+      state.purchaseTotalAmountByBrandApiStatus = ApiStates.failed;
       state.error = action.payload?.message;
       state.success = "";
     });
