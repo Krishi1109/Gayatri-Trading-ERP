@@ -45,7 +45,6 @@ const purchaseAmountByStatus = async (year) => {
     totalAmount: formatIndianCurrency(totalAmountSum),
     count: queryResponse.reduce((sum, item) => sum + item.count, 0),
   });
-  console.log(transformedData);
   return { success: true, message: "Successfully fetched total purchase amount by status", result: transformedData };
 };
 
@@ -84,9 +83,28 @@ const purchaseTotalAmountByMonth = async () => {
   });
   return { success: true, message: "Successfully fetched total purchase amount by month", result };
 };
+
+const brandPurchaseAmountService = async () => {
+  const brandPurchaseAmount = await Purchase.aggregate([
+    {
+      $match: { status: "COMPLETED" },
+    },
+    {
+      $group: {
+        _id: "$brand", // Group by month
+        totalAmount: {
+          $sum: { $multiply: ["$price", "$items_per_package", "$qty"] }, // Calculate total amount
+        },
+      },
+    },
+  ]);
+
+  return { success: true, message: "Successfully fetch total amount by brand", result: brandPurchaseAmount };
+};
 const purchaseServices = {
   purchaseAmountByStatus,
   purchaseTotalAmountByMonth,
+  brandPurchaseAmountService,
 };
 
 export default purchaseServices;

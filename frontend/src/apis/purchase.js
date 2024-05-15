@@ -45,3 +45,12 @@ export const fetchPurchaseAmountByMonth = createAsyncThunk("fetchPurchaseAmountB
     return rejectWithValue(error);
   }
 });
+
+export const fetchPurchaseAmountByBrand = createAsyncThunk("fetchPurchaseAmountByBrand", async (_, { rejectWithValue }) => {
+  try {
+    const response = await API.GET(`/api/purchase/analysis/brand-purchase-amount`);
+    return response.data.result;
+  } catch (error) {
+    return rejectWithValue(error);
+  }
+});

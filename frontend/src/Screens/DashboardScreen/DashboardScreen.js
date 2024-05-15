@@ -5,7 +5,7 @@ import DisplayCard from "./DisplayCard";
 import BrandPieChart from "./Graphs/BrandPieChart";
 import { years } from "../../shared/constants";
 import { useDispatch, useSelector } from "react-redux";
-import { fetchPurchaseAnalysisByStatus } from "../../apis/purchase";
+import { fetchPurchaseAmountByBrand, fetchPurchaseAnalysisByStatus } from "../../apis/purchase";
 
 const DashboardScreen = () => {
   const dispatch = useDispatch();
@@ -16,6 +16,7 @@ const DashboardScreen = () => {
 
   useEffect(() => {
     dispatch(fetchPurchaseAnalysisByStatus({ year: selectedYear }));
+    dispatch(fetchPurchaseAmountByBrand());
   }, [dispatch, selectedYear]);
 
   return (
