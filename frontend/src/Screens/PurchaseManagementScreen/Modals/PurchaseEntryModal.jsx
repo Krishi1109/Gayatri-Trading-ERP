@@ -31,7 +31,7 @@ const PurchaseEntryModal = (props) => {
     initialValues: {
       brand: "",
       category: "",
-      variant: "",
+      variant: 0,
       unit: "",
       items_per_package: "",
       qty: "",

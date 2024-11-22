@@ -10,24 +10,28 @@ const PurchaseLineChart = () => {
   const { purchaseAmountByMonthData } = useSelector((state) => state.purchase);
 
   // Extract totalAmount values for each month and convert them to numbers
-  const amountData = Months.map((month, index) => {
+  const amountData = Months.map((_, index) => {
     const data = purchaseAmountByMonthData.find((item) => item.month === index + 1);
     let amount = 0;
-    if (data && typeof data.totalAmount === "string") {
-      amount = parseInt(data.totalAmount.replace(/₹|,/g, ""));
-    } else if (typeof data.totalAmount === "number") {
-      amount = data.totalAmount;
+
+    if (data) {
+      if (typeof data.totalAmount === "string") {
+        amount = parseInt(data.totalAmount.replace(/₹|,/g, ""), 10) || 0;
+      } else if (typeof data.totalAmount === "number") {
+        amount = data.totalAmount;
+      }
     }
+
     return amount;
   });
 
   useEffect(() => {
     dispatch(fetchPurchaseAmountByMonth());
-  }, [dispatch]); // include dispatch as a dependency to avoid unnecessary re-renders
+  }, [dispatch]);
 
   return (
     <div style={{ width: "100%", margin: "auto" }}>
-      <LineChart sx={{ p: 1}} height={300} series={[{ data: amountData, label: "Purchase Amount" }]} xAxis={[{ scaleType: "point", data: Months }]} />
+      <LineChart sx={{ p: 1 }} height={300} series={[{ data: amountData, label: "Purchase Amount" }]} xAxis={[{ scaleType: "point", data: Months }]} />
     </div>
   );
 };
