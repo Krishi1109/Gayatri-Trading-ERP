@@ -1,7 +1,15 @@
 import app from "./src/app";
+import ConnectDatabase from "./src/db/conn";
 import error from "./src/middlewares/error";
+import dotEnv from "dotenv";
+
+dotEnv.config();
+
+const PORT = process.env.PORT;
+
+ConnectDatabase();
 
 app.use(error);
-app.listen(5000, (req, res) => {
-  console.log("server is running on the port - 5000!");
+app.listen(PORT, (req, res) => {
+  console.log(`server is running on the port - ${PORT}!`);
 });
