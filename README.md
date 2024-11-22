@@ -113,4 +113,23 @@ The **Purchase Orders** section provides a comprehensive view of active and comp
 ### Example
 ![image](https://github.com/user-attachments/assets/e0e7c2fc-4817-4f4b-81c3-16bf710ac871)
 
+---
 
+## Dashboard
+
+The **Dashboard** provides a detailed overview of purchase data with key metrics and visual insights to help users analyze their business performance.
+
+### Key Features
+
+1. **Summary Metrics**:
+   - Total amount and order count for:
+     - **Active Orders**
+     - **Complete Orders**
+     - **All Orders**
+
+2. **Visual Insights**:
+   - **Line Chart**: Displays the purchase amount of **complete orders** over time, helping to track trends and performance.
+   - **Pie Chart**: Represents the **total purchase amount by brands**, giving a clear distribution of spending across different brands.
+
+### Example
+![image](https://github.com/user-attachments/assets/79865e84-9e7c-476a-b9b0-1d6b5cea4f3f)
