@@ -67,11 +67,13 @@ const PurchaseListTable = () => {
         return item.status && item.status.toLowerCase() === `${status.toLowerCase()}`;
       });
     }
-
+    
     setTableData(filteredData);
     // setPage(1); // Reset page when applying filter
   };
-
+  const totalRemainingQty = tableData.reduce((acc, item) => {
+    return acc + (item.qty - item.ordered_qty);
+  }, 0);
   const slicedData = tableData.slice((page - 1) * rowsPerPage, page * rowsPerPage);
   return (
     <>
@@ -115,6 +117,10 @@ const PurchaseListTable = () => {
             renderInput={(params) => <TextField {...params} label="Status" />}
           />
         </div>
+        {/* Display total remaining qty */}
+        <Typography variant="subtitle1" fontWeight="bold" sx={{ ml: "auto", color: "gray" }}>
+          Total Remaining Qty: {totalRemainingQty}
+        </Typography>
       </Stack>
 
       <TableContainer component={Paper}>
