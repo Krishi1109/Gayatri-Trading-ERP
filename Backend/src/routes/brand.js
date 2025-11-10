@@ -14,3 +14,4 @@ router
   .delete(authMiddleware.authentication, brandController.deleteBrand);
 
 export default router;
+
