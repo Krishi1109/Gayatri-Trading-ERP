@@ -9,6 +9,7 @@ const PORT = process.env.PORT;
 
 ConnectDatabase();
 
+// Error
 app.use(error);
 app.listen(PORT, (req, res) => {
   console.log(`server is running on the port - ${PORT}!`);
