@@ -9,6 +9,7 @@ import CategoryModal from "./Modals/CategoryModal";
 import PurchaseEntryModal from "./Modals/PurchaseEntryModal";
 import VariantModal from "./Modals/VariantModal";
 import UnitModal from "./Modals/UnitModal";
+import AnimatedDivider from "../../shared/AnimatedDivider";
 
 const StockManagement = () => {
   const dispatch = useDispatch();
@@ -36,6 +37,8 @@ const StockManagement = () => {
       </Stack>
       {/* Table for the active purchase order */}
       <ActiveOrdersPurchaseTable />
+
+      <AnimatedDivider />
       {/* Table for the all purchase order  */}
       <PurchaseListTable />
     </Container>

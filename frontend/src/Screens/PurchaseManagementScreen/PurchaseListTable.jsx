@@ -21,37 +21,32 @@ const PurchaseListTable = () => {
 
   const [tableData, setTableData] = useState(purchaseInfo);
   const [page, setPage] = useState(1);
+
   const [selectedBrand, setSelectedBrand] = useState("");
   const [selectedCategory, setSelectedCategory] = useState("");
-  const [selectedPurchaseOrderStatus, setSelectedPurchaseOrderStatus] = useState("");
+  const [selectedPurchaseOrderStatus, setSelectedPurchaseOrderStatus] = useState([]);
+
+  // ⭐ NEW: Date Range States
+  const [startDate, setStartDate] = useState("");
+  const [endDate, setEndDate] = useState("");
+
   const rowsPerPage = 10;
 
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
   };
 
-  const handleBrandFilter = (event, value) => {
-    setSelectedBrand(value);
-  };
-
-  const handleCategoryFilter = (event, value) => {
-    setSelectedCategory(value);
-  };
-
-  const handlePurchaseOrderStatusFilter = (event, value) => {
-    setSelectedPurchaseOrderStatus(value);
-  };
-
   useEffect(() => {
-    filterData(selectedBrand, selectedCategory, selectedPurchaseOrderStatus);
+    filterData(selectedBrand, selectedCategory, selectedPurchaseOrderStatus, startDate, endDate);
   }, [purchaseInfo]);
 
   useEffect(() => {
-    filterData(selectedBrand, selectedCategory, selectedPurchaseOrderStatus);
+    filterData(selectedBrand, selectedCategory, selectedPurchaseOrderStatus, startDate, endDate);
     setPage(1);
-  }, [selectedBrand, selectedCategory, selectedPurchaseOrderStatus]);
+  }, [selectedBrand, selectedCategory, selectedPurchaseOrderStatus, startDate, endDate]);
 
-  const filterData = (brand, category, status) => {
+  // ⭐ UPDATED FILTER FUNCTION
+  const filterData = (brand, category, status, start, end) => {
     let filteredData = purchaseInfo;
 
     if (brand) {
@@ -62,69 +57,115 @@ const PurchaseListTable = () => {
       filteredData = filteredData.filter((item) => item.category && item.category.toLowerCase().includes(category.toLowerCase()));
     }
 
-    if (status) {
-      filteredData = filteredData.filter((item) => {
-        return item.status && item.status.toLowerCase() === `${status.toLowerCase()}`;
-      });
+    if (status && status.length > 0) {
+      filteredData = filteredData.filter((item) => status.map((s) => s.toLowerCase()).includes(item.status.toLowerCase()));
     }
-    
+
+    // ⭐ DATE RANGE FILTER
+    if (start) {
+      filteredData = filteredData.filter((item) => new Date(item.createdAt) >= new Date(start));
+    }
+
+    if (end) {
+      const endDateWithTime = new Date(end);
+      endDateWithTime.setHours(23, 59, 59, 999);
+      filteredData = filteredData.filter((item) => new Date(item.createdAt) <= endDateWithTime);
+    }
+
     setTableData(filteredData);
-    // setPage(1); // Reset page when applying filter
   };
-  const totalRemainingQty = tableData.reduce((acc, item) => {
-    return acc + (item.qty - item.ordered_qty);
-  }, 0);
+
   const slicedData = tableData.slice((page - 1) * rowsPerPage, page * rowsPerPage);
+
+  const totalRemainingQty = tableData.reduce((sum, item) => {
+    return sum + (item.qty - item.ordered_qty);
+  }, 0);
+
   return (
     <>
-      <Stack direction="row" gap={2} sx={{ my: 2 }}>
-        {/* Brand Filter */}
-        <div>
+      <Stack direction="row" alignItems="center" justifyContent="space-between" sx={{ my: 2 }}>
+        {/* LEFT SIDE — FILTERS */}
+        <Stack direction="row" gap={2} alignItems="center">
+          {/* Brand Filter */}
           <Autocomplete
             size="small"
             disablePortal
-            id="text-btrand"
             options={brandInfo.map((r) => r.name)}
-            onChange={(e, value) => handleBrandFilter(e, value)}
             value={selectedBrand}
+            onChange={(e, value) => setSelectedBrand(value)}
             sx={{ width: 200 }}
             renderInput={(params) => <TextField {...params} label="Brand" />}
           />
-        </div>
 
-        <div>
+          {/* Category Filter */}
           <Autocomplete
             size="small"
             disablePortal
-            id="text-btrand"
             options={categoryInto.map((r) => r.name)}
-            onChange={(e, value) => handleCategoryFilter(e, value)}
             value={selectedCategory}
+            onChange={(e, value) => setSelectedCategory(value)}
             sx={{ width: 200 }}
             renderInput={(params) => <TextField {...params} label="Category" />}
           />
-        </div>
 
-        <div>
+          {/* Status Filter - Multiple */}
           <Autocomplete
+            multiple
             size="small"
             disablePortal
-            id="text-btrand"
             options={purchaseOrderStatus.map((r) => r.label)}
-            onChange={(e, value) => handlePurchaseOrderStatusFilter(e, value)}
             value={selectedPurchaseOrderStatus}
-            sx={{ width: 200 }}
+            onChange={(e, value) => setSelectedPurchaseOrderStatus(value)}
+            sx={{ width: 250 }}
             renderInput={(params) => <TextField {...params} label="Status" />}
           />
-        </div>
-        {/* Display total remaining qty */}
-        <Typography variant="subtitle1" fontWeight="bold" sx={{ ml: "auto", color: "gray" }}>
-          Total Remaining Qty: {totalRemainingQty}
+
+          {/* Start Date */}
+          <TextField
+            label="Start Date"
+            type="date"
+            size="small"
+            value={startDate}
+            onChange={(e) => setStartDate(e.target.value)}
+            sx={{ width: 160 }}
+            InputLabelProps={{ shrink: true }}
+          />
+
+          {/* End Date */}
+          <TextField
+            label="End Date"
+            type="date"
+            size="small"
+            value={endDate}
+            onChange={(e) => setEndDate(e.target.value)}
+            sx={{ width: 160 }}
+            InputLabelProps={{ shrink: true }}
+          />
+
+          {/* CLEAR BUTTON */}
+          <Button
+            variant="outlined"
+            color="error"
+            onClick={() => {
+              setSelectedBrand("");
+              setSelectedCategory("");
+              setSelectedPurchaseOrderStatus([]);
+              setStartDate("");
+              setEndDate("");
+            }}
+            sx={{ height: 40, minWidth: 40 }}
+          >
+            X
+          </Button>
+        </Stack>
+
+        {/* RIGHT SIDE — REMAINING QTY */}
+        <Typography variant="h6" fontWeight="bold" sx={{ whiteSpace: "nowrap" }}>
+          Remaining Qty: {totalRemainingQty}
         </Typography>
       </Stack>
 
       <TableContainer component={Paper}>
-        {/* All Order Table */}
         <Table aria-label="customized table">
           <TableHead>
             <TableRow>
@@ -140,56 +181,66 @@ const PurchaseListTable = () => {
               <StyledTableCell>ACTIONS</StyledTableCell>
             </TableRow>
           </TableHead>
+
           <TableBody>
             {slicedData.map((item) => (
               <StyledTableRow key={item._id}>
-                <StyledTableCell component="th" scope="row">
+                <StyledTableCell>
                   <Typography variant="body2" fontWeight="bold">
                     {formatDate(item.createdAt)}
                   </Typography>
                 </StyledTableCell>
+
                 <StyledTableCell>
                   <Typography variant="body2" fontWeight="bold">
                     {item.brand}
                   </Typography>
                 </StyledTableCell>
+
                 <StyledTableCell>
                   <Typography variant="body2" fontWeight="bold">
                     {item.category}
                   </Typography>
                 </StyledTableCell>
+
                 <StyledTableCell>
                   <Typography variant="body2" fontWeight="bold">
                     {item.variant} {item.unit}
-                    <span style={{ color: `${GrayColor}` }}> X {item.items_per_package}</span>
+                    <span style={{ color: GrayColor }}> X {item.items_per_package}</span>
                   </Typography>
                 </StyledTableCell>
+
                 <StyledTableCell>
                   <Typography variant="body2" fontWeight="bold">
                     {item.price}
                   </Typography>
                 </StyledTableCell>
+
                 <StyledTableCell>
                   <Typography variant="body2" fontWeight="bold">
                     {item.qty}
                   </Typography>
                 </StyledTableCell>
+
                 <StyledTableCell>
-                  <ShowOrdersModalComponent brand={item.brand} label={"Show Orders"} orders={item?.orders} qty={item?.qty} ordered_qty={item?.ordered_qty} />
+                  <ShowOrdersModalComponent brand={item.brand} label={"Show Orders"} orders={item.orders} qty={item.qty} ordered_qty={item.ordered_qty} />
                 </StyledTableCell>
+
                 <StyledTableCell>
                   <Typography variant="body2" fontWeight="bold">
-                    {item?.qty - item?.ordered_qty}
+                    {item.qty - item.ordered_qty}
                   </Typography>
                 </StyledTableCell>
+
                 <StyledTableCell>
-                  <Typography variant="body2" color={getStatusColor(item.status)} fontWeight={"bold"}>
+                  <Typography variant="body2" fontWeight="bold" color={getStatusColor(item.status)}>
                     {item.status}
                   </Typography>
                 </StyledTableCell>
+
                 <StyledTableCell>
                   <Stack direction="row">
-                    <AddPurchaseQtyModal id={item?._id} />
+                    <AddPurchaseQtyModal id={item._id} />
                     <Button sx={{ px: 0 }}>
                       <Typography variant="body2" color={RedColor}>
                         <DeleteIcon />
@@ -203,14 +254,8 @@ const PurchaseListTable = () => {
         </Table>
       </TableContainer>
 
-      {/* Pagination for the table */}
-      <div
-        style={{
-          display: "flex",
-          justifyContent: "center",
-          marginTop: "20px",
-        }}
-      >
+      {/* Pagination */}
+      <div style={{ display: "flex", justifyContent: "center", marginTop: 20 }}>
         <Pagination
           count={Math.ceil(tableData.length / rowsPerPage)}
           page={page}
