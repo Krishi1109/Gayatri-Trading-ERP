@@ -25,7 +25,7 @@ const SmoothDivider = () => {
           },
         }}
       >
-        GAYATRI TRADING
+        GAYATRI TRADING / GAYATRI AGENCY
       </Typography>
     </Box>
   );
