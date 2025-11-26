@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import formatDate from "../../utils/formatDates.js";
 import "../../shared/sharedStyles.js";
 import { TableHead, TableRow, Typography, Autocomplete, TextField, Stack, Button } from "@mui/material";
@@ -10,12 +10,14 @@ import TableBody from "@mui/material/TableBody";
 import Pagination from "@mui/material/Pagination";
 import { StyledTableCell, StyledTableRow, getStatusColor } from "./purchaseManagement.styled.js";
 import ShowOrdersModalComponent from "./Modals/ShowOrdersModalComponent.jsx";
-import { GrayColor, RedColor, purchaseOrderStatus } from "../../shared/constants.js";
+import { ApiStates, GrayColor, RedColor, purchaseOrderStatus } from "../../shared/constants.js";
 import DeleteIcon from "@mui/icons-material/Delete";
 import AddPurchaseQtyModal from "./Modals/AddPurchaseQtyModal.jsx";
+import { deletePurchaseEntry, fetchPurchaseList } from "../../apis/purchase.js";
 
 const PurchaseListTable = () => {
-  const { purchaseInfo } = useSelector((state) => state.purchase);
+  const dispatch = useDispatch();
+  const { purchaseInfo, deletePurchaseEntryApiStatus } = useSelector((state) => state.purchase);
   const { brandInfo } = useSelector((state) => state.brands);
   const { categoryInto } = useSelector((state) => state.categories);
 
@@ -35,6 +37,12 @@ const PurchaseListTable = () => {
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
   };
+
+  useEffect(() => {
+    if (deletePurchaseEntryApiStatus === ApiStates.success) {
+      dispatch(fetchPurchaseList());
+    }
+  }, [dispatch, deletePurchaseEntryApiStatus]);
 
   useEffect(() => {
     filterData(selectedBrand, selectedCategory, selectedPurchaseOrderStatus, startDate, endDate);
@@ -81,6 +89,10 @@ const PurchaseListTable = () => {
     return sum + (item.qty - item.ordered_qty);
   }, 0);
 
+  const PurchaseDeleteHandler = (id) => {
+    console.log("hello");
+    dispatch(deletePurchaseEntry({ id }));
+  };
   return (
     <>
       <Stack direction="row" alignItems="center" justifyContent="space-between" sx={{ my: 2 }}>
@@ -241,7 +253,7 @@ const PurchaseListTable = () => {
                 <StyledTableCell>
                   <Stack direction="row">
                     <AddPurchaseQtyModal id={item._id} />
-                    <Button sx={{ px: 0 }}>
+                    <Button onClick={() => PurchaseDeleteHandler(item._id)} sx={{ px: 0 }}>
                       <Typography variant="body2" color={RedColor}>
                         <DeleteIcon />
                       </Typography>

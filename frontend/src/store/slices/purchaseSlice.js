@@ -7,6 +7,7 @@ import {
   fetchPurchaseAnalysisByStatus,
   fetchPurchaseAmountByMonth,
   fetchPurchaseAmountByBrand,
+  deletePurchaseEntry,
 } from "../../apis/purchase";
 
 const initialState = {
@@ -17,6 +18,7 @@ const initialState = {
   purchaseAnalysisByStatusApiStatus: ApiStates.idle,
   purchaseTotalAmountByMonthApiStatus: ApiStates.idle,
   purchaseTotalAmountByBrandApiStatus: ApiStates.idle,
+  deletePurchaseEntryApiStatus: ApiStates.idle,
   purchaseAnalysisByStatusData: [],
   purchaseAmountByMonthData: [],
   purchaseTotalAmountByBrandData: [],
@@ -34,6 +36,7 @@ const purchaseSlice = createSlice({
       state.addPurchaseOrderQtyApiStatus = ApiStates.idle;
       state.purchaseApiStatus = ApiStates.idle;
       state.purchaseEntryApiStatus = ApiStates.idle;
+      state.deletePurchaseEntryApiStatus = ApiStates.idle;
     },
   },
   extraReducers: (builder) => {
@@ -129,6 +132,21 @@ const purchaseSlice = createSlice({
     builder.addCase(fetchPurchaseAmountByBrand.rejected, (state, action) => {
       state.purchaseTotalAmountByBrandApiStatus = ApiStates.failed;
       state.error = action.payload?.message;
+      state.success = "";
+    });
+
+    // Add purchase entry
+    builder.addCase(deletePurchaseEntry.pending, (state) => {
+      state.deletePurchaseEntryApiStatus = ApiStates.pending;
+      state.success = "";
+    });
+    builder.addCase(deletePurchaseEntry.fulfilled, (state, action) => {
+      console.log("hello11");
+      state.deletePurchaseEntryApiStatus = ApiStates.success;
+      state.success = action.payload.message;
+    });
+    builder.addCase(deletePurchaseEntry.rejected, (state, action) => {
+      state.deletePurchaseEntryApiStatus = ApiStates.failed;
       state.success = "";
     });
   },

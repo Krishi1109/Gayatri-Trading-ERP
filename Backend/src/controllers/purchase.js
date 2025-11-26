@@ -63,6 +63,7 @@ const editOrderInPurchaseList = async (req, res, next) => {
   try {
     const id = req.params.id;
     const orderQty = req.body.order_qty;
+    const orderDate = req.body.order_date ? new Date(req.body.order_date) : new Date(); // ⭐ Use given date or today
 
     const product = await Purchase.findById(id);
 
@@ -71,22 +72,43 @@ const editOrderInPurchaseList = async (req, res, next) => {
     }
 
     if (product.ordered_qty + orderQty > product.qty) {
-      return next(new ErrorHandler("input valid qty", StatusCodes.NOT_FOUND));
-    } else {
-      product.ordered_qty += orderQty;
+      return next(new ErrorHandler("input valid qty", StatusCodes.BAD_REQUEST));
     }
+
+    // Update ordered qty
+    product.ordered_qty += orderQty;
+
+    // Update status
     if (product.ordered_qty < product.qty) {
       product.status = "ACTIVE";
-    }
-    if (product.ordered_qty == product.qty) {
+    } else if (product.ordered_qty === product.qty) {
       product.status = "COMPLETED";
     }
-    product.orders.push({ order_qty: orderQty, order_date: new Date() });
+
+    // Push new order item
+    product.orders.push({
+      order_qty: orderQty,
+      order_date: orderDate, // ⭐ final value used
+    });
 
     await product.save();
+
     res.status(StatusCodes.OK).send({
       success: true,
       message: "Add order qty successfully!",
+    });
+  } catch (error) {
+    return next(new ErrorHandler(error.message ?? Constants.defaultMessage, StatusCodes.INTERNAL_SERVER_ERROR));
+  }
+};
+
+const deletePurchaseEntry = async (req, res, next) => {
+  try {
+    const id = req.params.id;
+    await Purchase.findByIdAndDelete(id);
+    res.status(StatusCodes.OK).send({
+      success: true,
+      message: "Delete Delete Purchase Entry successfully!",
     });
   } catch (error) {
     return next(new ErrorHandler(error.message ?? Constants.defaultMessage, StatusCodes.INTERNAL_SERVER_ERROR));
@@ -139,6 +161,7 @@ const purchaseController = {
   addPurchase,
   fetchPurchaseList,
   editOrderInPurchaseList,
+  deletePurchaseEntry,
   filteredPurchaseList,
   purchaseOrderAnalysisByStatus,
   purchaseTotalAmountByMonth,
