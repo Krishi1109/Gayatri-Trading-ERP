@@ -1,12 +1,13 @@
 import React, { useEffect, useState } from "react";
 import { Button, Paper, Stack, Table, TableBody, TableContainer, TableHead, TableRow, Typography } from "@mui/material";
-import { DarkStyledTableCell, StyledTableRow, getStatusColor } from "./purchaseManagement.styled";
+import { DarkStyledTableCell, StyledTableRow } from "../../shared/TableStyles.js";
 import { useSelector } from "react-redux";
 import formatDate from "../../utils/formatDates";
 import ShowOrdersModalComponent from "./Modals/ShowOrdersModalComponent";
 import AddPurchaseQtyModal from "./Modals/AddPurchaseQtyModal.jsx";
 import { GrayColor, RedColor } from "../../shared/constants.js";
 import DeleteIcon from "@mui/icons-material/Delete";
+import { getStatusColor } from "./purchaseManagement.styled.js";
 
 const ActiveOrdersPurchaseTable = () => {
   const { purchaseInfo, addPurchaseOrderQtyApiStatus } = useSelector((state) => state.purchase);

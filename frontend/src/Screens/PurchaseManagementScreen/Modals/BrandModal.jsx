@@ -7,7 +7,7 @@ import { ApiStates, RedColor, primaryMediumColor } from "../../../shared/constan
 import { useDispatch, useSelector } from "react-redux";
 import { fetchBrands, addBrand, deleteBrand } from "../../../apis/brands"; // Import the addBrand action creator
 import { resetFields } from "../../../store/slices/brandSlice";
-import { SmallStyledTableCell, StyledTableCell, StyledTableRow } from "../purchaseManagement.styled";
+import { SmallStyledTableCell, StyledTableCell, StyledTableRow } from "../../../shared/TableStyles";
 import DeleteIcon from "@mui/icons-material/Delete";
 import GradientCircularProgress from "../../../components/loader";
 

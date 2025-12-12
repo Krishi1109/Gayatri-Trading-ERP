@@ -8,7 +8,7 @@ import { ApiStates, RedColor, primaryMediumColor } from "../../../shared/constan
 import { addVariant, deleteVariant, fetchVariants } from "../../../apis/variants"; // Import the addBrand action creator
 import GradientCircularProgress from "../../../components/loader";
 import { resetVariantFields } from "../../../store/slices/variantSlice";
-import { SmallStyledTableCell, StyledTableCell, StyledTableRow } from "../purchaseManagement.styled";
+import { SmallStyledTableCell, StyledTableCell, StyledTableRow } from "../../../shared/TableStyles";
 import DeleteIcon from "@mui/icons-material/Delete";
 
 const VariantModal = () => {

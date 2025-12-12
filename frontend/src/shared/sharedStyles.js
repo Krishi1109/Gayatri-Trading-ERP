@@ -30,6 +30,7 @@ export const GreenFillButton = styled(Button)(({ theme }) => ({
     backgroundColor: darken(GreenColor, 0.1),
   },
 }));
+
 export const CyanFillButton = styled(Button)(({ theme }) => ({
   padding: `${theme.spacing(0.5)} ${theme.spacing(2)}`,
   textTransform: "none",
