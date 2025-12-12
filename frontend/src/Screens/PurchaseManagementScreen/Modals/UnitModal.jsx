@@ -8,7 +8,7 @@ import { ApiStates, RedColor, primaryMediumColor } from "../../../shared/constan
 import { addUnit, deleteUnit, fetchUnits } from "../../../apis/unit"; // Import the addBrand action creator
 import GradientCircularProgress from "../../../components/loader";
 import { resetUnitFields } from "../../../store/slices/unitSlice";
-import { SmallStyledTableCell, StyledTableCell, StyledTableRow } from "../purchaseManagement.styled";
+import { SmallStyledTableCell, StyledTableCell, StyledTableRow } from "../../../shared/TableStyles";
 import DeleteIcon from "@mui/icons-material/Delete";
 
 const UnitModal = () => {

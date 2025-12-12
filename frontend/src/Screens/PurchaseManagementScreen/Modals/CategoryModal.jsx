@@ -6,7 +6,7 @@ import AddIcon from "@mui/icons-material/Add";
 import { ApiStates, RedColor, primaryMediumColor } from "../../../shared/constants";
 import { useDispatch, useSelector } from "react-redux";
 import { resetFields } from "../../../store/slices/categorySlice";
-import { SmallStyledTableCell, StyledTableCell, StyledTableRow } from "../purchaseManagement.styled";
+import { SmallStyledTableCell, StyledTableCell, StyledTableRow } from "../../../shared/TableStyles";
 import DeleteIcon from "@mui/icons-material/Delete";
 import GradientCircularProgress from "../../../components/loader";
 import { addCategory, deleteCategory, fetchCategories } from "../../../apis/categories";
