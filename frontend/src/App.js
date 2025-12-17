@@ -6,6 +6,7 @@ import Navbar from "./components/Navbar";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import PurchaseManagement from "./Screens/PurchaseManagementScreen/PurchaseManagement";
 import PartyManagement from "./Screens/PartyScreens/PartyManagement";
+import PartyDetails from "./Screens/PartyScreens/PartyDetails";
 
 const App = () => {
   return (
@@ -17,6 +18,7 @@ const App = () => {
           <Route path="/dashboard" element={<DashboardScreen />} />
           <Route path="/purchase" element={<PurchaseManagement />} />
           <Route path="/party" element={<PartyManagement />} />
+          <Route path="/party_details/:id" element={<PartyDetails />} />
         </Route>
       </Routes>
       <Footer />

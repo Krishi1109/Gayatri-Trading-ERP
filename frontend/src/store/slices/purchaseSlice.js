@@ -141,7 +141,6 @@ const purchaseSlice = createSlice({
       state.success = "";
     });
     builder.addCase(deletePurchaseEntry.fulfilled, (state, action) => {
-      console.log("hello11");
       state.deletePurchaseEntryApiStatus = ApiStates.success;
       state.success = action.payload.message;
     });

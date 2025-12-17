@@ -11,7 +11,7 @@ export const StyledTableCell = styled(TableCell)(({ theme }) => ({
   },
   [`&.${tableCellClasses.body}`]: {
     fontSize: 14,
-    padding: 12,
+    padding: 6,
   },
 }));
 
@@ -40,6 +40,6 @@ export const DarkStyledTableCell = styled(TableCell)(({ theme }) => ({
   },
   [`&.${tableCellClasses.body}`]: {
     fontSize: 14,
-    padding: 12,
+    padding: 6,
   },
 }));

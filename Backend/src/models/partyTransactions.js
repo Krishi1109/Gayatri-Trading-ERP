@@ -1,6 +1,6 @@
 import mongoose from "mongoose";
 
-const partyBillSchema = new mongoose.Schema(
+const partyTransactionsSchema = new mongoose.Schema(
   {
     party_id: {
       type: mongoose.Schema.Types.ObjectId,
@@ -11,22 +11,26 @@ const partyBillSchema = new mongoose.Schema(
       type: Date,
       default: Date.now,
     },
-    bill_amount: {
+    amount: {
       type: Number,
     },
-    received_amount: {
-      type: Number,
-      default: 0,
-    },
-    note: {
+    transaction_module: {
       type: String,
+      default: null,
     },
-    payment_status: { type: String, enum: ["PENDING", "RECEIVED"], default: "PENDING" },
+    transaction_module: {
+      type: String,
+      default: null,
+    },
+    transaction_module_id: {
+      type: String,
+      default: null,
+    },
   },
   {
     timestamps: true,
   }
 );
 
-const partyBill = new mongoose.model("PartyBill", partyBillSchema);
-export default partyBill;
+const partyTransactions = new mongoose.model("PartyTransactions", partyTransactionsSchema);
+export default partyTransactions;
