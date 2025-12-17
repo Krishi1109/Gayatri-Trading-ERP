@@ -8,6 +8,7 @@ import categoryRouter from "./routes/category";
 import variantRouter from "./routes/variant";
 import unitRouter from "./routes/unit";
 import partyRouter from "./routes/party";
+import partyBillRouter from "./routes/partyBill";
 
 const app = Express();
 
@@ -23,5 +24,6 @@ app.use("/api/category", categoryRouter);
 app.use("/api/variant", variantRouter);
 app.use("/api/unit", unitRouter);
 app.use("/api/party", partyRouter);
+app.use("/api/party_bill", partyBillRouter);
 
 export default app;

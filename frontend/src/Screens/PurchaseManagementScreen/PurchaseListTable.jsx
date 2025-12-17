@@ -91,7 +91,6 @@ const PurchaseListTable = () => {
   }, 0);
 
   const PurchaseDeleteHandler = (id) => {
-    console.log("hello");
     dispatch(deletePurchaseEntry({ id }));
   };
   return (

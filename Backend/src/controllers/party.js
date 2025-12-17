@@ -4,11 +4,32 @@ import { StatusCodes } from "http-status-codes";
 
 const fetchParties = async (req, res, next) => {
   try {
-    const parties = await Party.find();
+    const { page, limit } = req.pagination;
+    const search = req.query.search?.trim();
+
+    const query = search
+      ? {
+          $or: [{ name: { $regex: search, $options: "i" } }, { code: { $regex: search, $options: "i" } }],
+        }
+      : {};
+
+    const total = await Party.countDocuments(query);
+
+    const parties = await Party.find(query)
+      .skip((page - 1) * limit)
+      .limit(limit)
+      .sort({ createdAt: -1 });
+
     res.status(StatusCodes.OK).send({
       success: true,
       message: "Fetch Parties successfully!",
       result: parties,
+      pagination: {
+        page,
+        limit,
+        total,
+        totalPages: Math.ceil(total / limit),
+      },
     });
   } catch (error) {
     return next(new ErrorHandler(error.message ?? Constants.defaultMessage, StatusCodes.INTERNAL_SERVER_ERROR));

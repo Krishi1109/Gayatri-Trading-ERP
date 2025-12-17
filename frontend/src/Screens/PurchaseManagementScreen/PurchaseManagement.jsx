@@ -17,6 +17,7 @@ const StockManagement = () => {
   useEffect(() => {
     dispatch(fetchPurchaseList());
   }, [dispatch]);
+
   return (
     <Container maxWidth="xl">
       {/* Main Heading */}
