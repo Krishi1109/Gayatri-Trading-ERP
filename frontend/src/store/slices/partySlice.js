@@ -1,12 +1,14 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { ApiStates } from "../../shared/constants";
-import { addParty, fetchParties } from "../../apis/party";
+import { addParty, fetchParties, fetchPartiesAuto } from "../../apis/party";
 
 const initialState = {
   addPartyApiStatus: ApiStates.idle,
   fetchPartiesApiStatus: ApiStates.idle,
+  fetchPartiesAutoApiStatus: ApiStates.idle,
 
   partyList: [],
+  partyListAuto: [],
 
   pagination: {
     page: 1,
@@ -56,6 +58,22 @@ const partySlice = createSlice({
 
     builder.addCase(fetchParties.rejected, (state, action) => {
       state.fetchPartiesApiStatus = ApiStates.failed;
+      state.error = action.payload;
+    });
+
+    // Fetch Parties Auto
+    builder.addCase(fetchPartiesAuto.pending, (state) => {
+      state.fetchPartiesAutoApiStatus = ApiStates.pending;
+    });
+
+    builder.addCase(fetchPartiesAuto.fulfilled, (state, action) => {
+      state.fetchPartiesAutoApiStatus = ApiStates.success;
+      state.partyListAuto = action.payload?.result || [];
+      state.pagination = action.payload?.pagination || initialState.pagination;
+    });
+
+    builder.addCase(fetchPartiesAuto.rejected, (state, action) => {
+      state.fetchPartiesAutoApiStatus = ApiStates.failed;
       state.error = action.payload;
     });
   },

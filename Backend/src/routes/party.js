@@ -7,6 +7,8 @@ const router = Express.Router();
 // Fetch all the party --- pagination, search
 router.route("/").get(pagination, authMiddleware.authentication, partyController.fetchParties);
 
+router.route("/auto").get(pagination, authMiddleware.authentication, partyController.fetchPartiesAuto);
+
 // Post Party
 router.route("/").post(authMiddleware.authentication, partyController.addParty);
 

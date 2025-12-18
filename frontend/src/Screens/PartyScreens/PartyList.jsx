@@ -6,7 +6,6 @@ import { useEffect, useState } from "react";
 import { fetchParties } from "../../apis/party";
 import { CyanOutlineButton } from "../../shared/sharedStyles";
 import { useNavigate } from "react-router-dom";
-import { primaryDarkColor } from "../../shared/constants";
 
 const PartyList = () => {
   const dispatch = useDispatch();
@@ -23,7 +22,7 @@ const PartyList = () => {
 
   useEffect(() => {
     dispatch(fetchParties({ page, limit, search }));
-  }, [dispatch, page, search]);
+  }, [dispatch, page, search, limit]);
 
   const handleOnSubmit = (id) => {
     navigate(`/party_details/${id}`);

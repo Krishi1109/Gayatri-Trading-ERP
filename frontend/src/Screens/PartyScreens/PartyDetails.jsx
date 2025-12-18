@@ -18,6 +18,8 @@ const PartyDetails = () => {
       ) : (
         <Typography color="error">Party not found</Typography>
       )}
+
+      
     </Paper>
   );
 };

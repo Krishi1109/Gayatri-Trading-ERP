@@ -36,6 +36,40 @@ const fetchParties = async (req, res, next) => {
   }
 };
 
+const fetchPartiesAuto = async (req, res, next) => {
+  try {
+    const { page, limit } = req.pagination;
+    const search = req.query.search || "";
+
+    const query = search
+      ? {
+          $or: [{ name: { $regex: search, $options: "i" } }, { code: { $regex: search, $options: "i" } }],
+        }
+      : {};
+
+    const total = await Party.countDocuments(query);
+
+    const parties = await Party.find(query)
+      .select("_id name code") // 👈 IMPORTANT for autocomplete
+      .skip((page - 1) * limit)
+      .limit(limit)
+      .sort({ name: 1 });
+
+    res.status(200).json({
+      success: true,
+      result: parties,
+      pagination: {
+        page,
+        limit,
+        total,
+        totalPages: Math.ceil(total / limit),
+      },
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
 const addParty = async (req, res, next) => {
   try {
     const { name, code, mobile, address } = req.body;
@@ -79,6 +113,7 @@ const deleteParty = async (req, res, next) => {
 const partyController = {
   addParty,
   fetchParties,
+  fetchPartiesAuto,
   deleteParty,
 };
 
