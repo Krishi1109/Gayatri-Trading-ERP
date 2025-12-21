@@ -18,13 +18,12 @@ const partyTransactionsSchema = new mongoose.Schema(
       type: String,
       default: null,
     },
-    transaction_module: {
-      type: String,
-      default: null,
-    },
     transaction_module_id: {
       type: String,
       default: null,
+    },
+    note: {
+      type: String,
     },
   },
   {

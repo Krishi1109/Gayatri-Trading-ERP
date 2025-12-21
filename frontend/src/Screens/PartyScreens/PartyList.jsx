@@ -48,7 +48,7 @@ const PartyList = () => {
               <DarkStyledTableCell>Code</DarkStyledTableCell>
               <DarkStyledTableCell>Amount</DarkStyledTableCell>
               <DarkStyledTableCell>Pending Bills</DarkStyledTableCell>
-              <DarkStyledTableCell>Details</DarkStyledTableCell>
+              <DarkStyledTableCell>Details / Trans</DarkStyledTableCell>
               <DarkStyledTableCell>Actions</DarkStyledTableCell>
             </TableRow>
           </TableHead>
@@ -65,8 +65,11 @@ const PartyList = () => {
                 <StyledTableCell>2</StyledTableCell>
 
                 <StyledTableCell>
-                  <CyanOutlineButton variant="outlined" onClick={() => handleOnSubmit(item._id)}>
+                  <CyanOutlineButton sx={{ mx: 1 }} variant="outlined" onClick={() => handleOnSubmit(item._id)}>
                     Bills
+                  </CyanOutlineButton>
+                  <CyanOutlineButton variant="outlined" onClick={() => handleOnSubmit(item._id)}>
+                    Trans
                   </CyanOutlineButton>
                 </StyledTableCell>
 
