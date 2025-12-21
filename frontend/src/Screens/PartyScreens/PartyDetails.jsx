@@ -1,24 +1,105 @@
-import { Typography, Paper, Stack } from "@mui/material";
+import { Typography, Paper, Stack, Table, TableBody, TableContainer, TableHead, TableRow, Container, CircularProgress, Pagination } from "@mui/material";
 import { useParams } from "react-router-dom";
-import { useSelector } from "react-redux";
-import { primaryDarkColor, primaryLightColor } from "../../shared/constants";
+import { useDispatch, useSelector } from "react-redux";
+import { useEffect, useState } from "react";
+import { DarkStyledTableCell, StyledTableCell, StyledTableRow } from "../../shared/TableStyles";
+import { primaryDarkColor } from "../../shared/constants";
+import { fetchPartyBillsByPartyId } from "../../apis/partyBill";
+import { ApiStates } from "../../shared/constants";
 
 const PartyDetails = () => {
   const { id } = useParams();
+  const dispatch = useDispatch();
+
   const { partyList } = useSelector((state) => state.parties);
+  const { partyBillsById, fetchPartyBillsApiStatus, pagination } = useSelector((state) => state.partyBills);
+
+  const [page, setPage] = useState(1);
 
   const party = partyList.find((p) => p._id === id);
 
+  // 🔹 Fetch bills when page or party changes
+  useEffect(() => {
+    if (id) {
+      dispatch(fetchPartyBillsByPartyId({ partyId: id, page, limit: 10 }));
+    }
+  }, [dispatch, id, page]);
+
   return (
-    <Paper sx={{ p: 3 }}>
-      {party ? (
-        <Typography variant="h6" sx={{ color: primaryDarkColor }} fontWeight="bold">
-          Party Name: {party.name}
+    <Container maxWidth="xl">
+      {/* PARTY HEADER */}
+      <Paper sx={{ p: 2, mb: 3 }}>
+        {party ? (
+          <Typography variant="h6" fontWeight="bold" sx={{ color: primaryDarkColor }}>
+            Party Name: {party.name}
+          </Typography>
+        ) : (
+          <Typography color="error">Party not found</Typography>
+        )}
+      </Paper>
+
+      {/* PARTY BILLS */}
+      <Stack>
+        <Typography variant="subtitle1" fontWeight="bold" gutterBottom>
+          Party Bills
         </Typography>
-      ) : (
-        <Typography color="error">Party not found</Typography>
-      )}
-    </Paper>
+
+        <>
+          <TableContainer component={Paper}>
+            <Table>
+              <TableHead>
+                <TableRow>
+                  <DarkStyledTableCell>Date</DarkStyledTableCell>
+                  <DarkStyledTableCell>Bill Amount</DarkStyledTableCell>
+                  <DarkStyledTableCell>Received</DarkStyledTableCell>
+                  <DarkStyledTableCell>Status</DarkStyledTableCell>
+                  <DarkStyledTableCell>Note</DarkStyledTableCell>
+                </TableRow>
+              </TableHead>
+
+              <TableBody>
+                {partyBillsById.length > 0 ? (
+                  partyBillsById.map((bill) => (
+                    <StyledTableRow key={bill._id}>
+                      <StyledTableCell>{new Date(bill.date).toLocaleDateString()}</StyledTableCell>
+                      <StyledTableCell>₹{bill.bill_amount}</StyledTableCell>
+                      <StyledTableCell>₹{bill.received_amount}</StyledTableCell>
+                      <StyledTableCell>
+                        <Typography fontWeight="bold" color={bill.payment_status === "RECEIVED" ? "green" : "error"}>
+                          {bill.payment_status}
+                        </Typography>
+                      </StyledTableCell>
+                      <StyledTableCell>{bill.note || "-"}</StyledTableCell>
+                    </StyledTableRow>
+                  ))
+                ) : (
+                  <StyledTableRow>
+                    <StyledTableCell colSpan={5} align="center">
+                      No bills found
+                    </StyledTableCell>
+                  </StyledTableRow>
+                )}
+              </TableBody>
+            </Table>
+          </TableContainer>
+
+          {/* PAGINATION */}
+          {pagination.totalPages > 1 && (
+            <Stack alignItems="center" sx={{ mt: 2 }}>
+              <Pagination
+                count={pagination.totalPages}
+                page={page}
+                onChange={(_, value) => setPage(value)}
+                shape="rounded"
+                size="large"
+                variant="outlined"
+                color="primary"
+              />
+            </Stack>
+          )}
+        </>
+      </Stack>
+    </Container>
   );
 };
 

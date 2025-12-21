@@ -6,7 +6,6 @@ import { useEffect, useState } from "react";
 import { fetchParties } from "../../apis/party";
 import { CyanOutlineButton } from "../../shared/sharedStyles";
 import { useNavigate } from "react-router-dom";
-import { primaryDarkColor } from "../../shared/constants";
 
 const PartyList = () => {
   const dispatch = useDispatch();
@@ -23,7 +22,7 @@ const PartyList = () => {
 
   useEffect(() => {
     dispatch(fetchParties({ page, limit, search }));
-  }, [dispatch, page, search]);
+  }, [dispatch, page, search, limit]);
 
   const handleOnSubmit = (id) => {
     navigate(`/party_details/${id}`);
@@ -49,7 +48,7 @@ const PartyList = () => {
               <DarkStyledTableCell>Code</DarkStyledTableCell>
               <DarkStyledTableCell>Amount</DarkStyledTableCell>
               <DarkStyledTableCell>Pending Bills</DarkStyledTableCell>
-              <DarkStyledTableCell>Details</DarkStyledTableCell>
+              <DarkStyledTableCell>Details / Trans</DarkStyledTableCell>
               <DarkStyledTableCell>Actions</DarkStyledTableCell>
             </TableRow>
           </TableHead>
@@ -66,8 +65,11 @@ const PartyList = () => {
                 <StyledTableCell>2</StyledTableCell>
 
                 <StyledTableCell>
-                  <CyanOutlineButton variant="outlined" onClick={() => handleOnSubmit(item._id)}>
+                  <CyanOutlineButton sx={{ mx: 1 }} variant="outlined" onClick={() => handleOnSubmit(item._id)}>
                     Bills
+                  </CyanOutlineButton>
+                  <CyanOutlineButton variant="outlined" onClick={() => handleOnSubmit(item._id)}>
+                    Trans
                   </CyanOutlineButton>
                 </StyledTableCell>
 

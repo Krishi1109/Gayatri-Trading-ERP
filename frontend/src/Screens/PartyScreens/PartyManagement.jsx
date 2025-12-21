@@ -1,5 +1,6 @@
 import { Container, Stack, Typography } from "@mui/material";
 import PartyModal from "./AddPartyModal";
+import PartyBillModal from "./AddPartyBillModal";
 import PartyList from "./PartyList";
 
 const PartyManagement = () => {
@@ -12,7 +13,7 @@ const PartyManagement = () => {
         <Typography variant="h5" gutterBottom fontWeight="bold" align="center">
           Party Management
         </Typography>
-        <PartyModal />
+        <PartyBillModal />
       </Stack>
       <Stack sx={{ py: 1 }}>
         <PartyList />

@@ -23,3 +23,12 @@ export const fetchParties = createAsyncThunk("party/fetchParties", async ({ page
     return rejectWithValue(error.response?.data || error.message);
   }
 });
+
+export const fetchPartiesAuto = createAsyncThunk("parties/fetchParties", async ({ search = "", page = 1, limit = 10 }, thunkAPI) => {
+  try {
+    const res = await API.GET(`/api/party/auto?search=${search}&page=${page}&limit=${limit}`);
+    return res.data;
+  } catch (err) {
+    return thunkAPI.rejectWithValue(err.response.data);
+  }
+});
