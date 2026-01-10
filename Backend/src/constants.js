@@ -1,7 +1,8 @@
 const defaultMessage = "Something went wrong!";
 
 const transactionModuleName = {
-  PartyPurchaseBill: "Party Purchase Bill",
+  PartyPurchaseBill: "PARTY_PURCHASE_BILL",
+  PartyPurchasePayment: "PARTY_PURCHASE_PAYMENT",
 };
 
 const Constants = {

@@ -24,10 +24,13 @@ const PartyList = () => {
     dispatch(fetchParties({ page, limit, search }));
   }, [dispatch, page, search, limit]);
 
-  const handleOnSubmit = (id) => {
+  const handleOnSubmitBill = (id) => {
     navigate(`/party_details/${id}`);
   };
 
+  const handleOnSubmitTrans = (id) => {
+    navigate(`/party_transactions/${id}`);
+  };
   const handleSearchChange = (e) => {
     setSearch(e.target.value);
     setPage(1);
@@ -61,14 +64,14 @@ const PartyList = () => {
                 </StyledTableCell>
 
                 <StyledTableCell>{item.code}</StyledTableCell>
-                <StyledTableCell>{item.amount}</StyledTableCell>
-                <StyledTableCell>2</StyledTableCell>
+                <StyledTableCell>{item.totalAmount}</StyledTableCell>
+                <StyledTableCell>{item.pendingBillsCount}</StyledTableCell>
 
                 <StyledTableCell>
-                  <CyanOutlineButton sx={{ mx: 1 }} variant="outlined" onClick={() => handleOnSubmit(item._id)}>
+                  <CyanOutlineButton sx={{ mx: 1 }} variant="outlined" onClick={() => handleOnSubmitBill(item._id)}>
                     Bills
                   </CyanOutlineButton>
-                  <CyanOutlineButton variant="outlined" onClick={() => handleOnSubmit(item._id)}>
+                  <CyanOutlineButton variant="outlined" onClick={() => handleOnSubmitTrans(item._id)}>
                     Trans
                   </CyanOutlineButton>
                 </StyledTableCell>

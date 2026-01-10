@@ -41,7 +41,7 @@ const addPartyBill = async (req, res, next) => {
     await partyTransactions.create({
       party_id: partyId,
       date: newPartyBill.date,
-      amount: billAmount,
+      amount: -billAmount,
       transaction_module: Constants.transactionModuleName.PartyPurchaseBill,
       transaction_module_id: newPartyBill._id.toString(),
       note,
@@ -110,7 +110,7 @@ const getPartyBillsByPartyId = async (req, res, next) => {
     // -------------------------
     const bills = await partyBill
       .find(filter)
-      .sort({ date: -1 }) // latest first
+      .sort({ date: -1, createdAt: -1 }) // latest first
       .skip(skip)
       .limit(limit);
 

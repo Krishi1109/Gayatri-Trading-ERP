@@ -5,7 +5,8 @@ import { useEffect, useState } from "react";
 import { DarkStyledTableCell, StyledTableCell, StyledTableRow } from "../../shared/TableStyles";
 import { primaryDarkColor } from "../../shared/constants";
 import { fetchPartyBillsByPartyId } from "../../apis/partyBill";
-import { ApiStates } from "../../shared/constants";
+import { CyanOutlineButton } from "../../shared/sharedStyles";
+import AddPaymentModal from "./AddPaymentModal";
 
 const PartyDetails = () => {
   const { id } = useParams();
@@ -52,6 +53,8 @@ const PartyDetails = () => {
                   <DarkStyledTableCell>Date</DarkStyledTableCell>
                   <DarkStyledTableCell>Bill Amount</DarkStyledTableCell>
                   <DarkStyledTableCell>Received</DarkStyledTableCell>
+                  <DarkStyledTableCell>Pending</DarkStyledTableCell>
+                  <DarkStyledTableCell>Payment</DarkStyledTableCell>
                   <DarkStyledTableCell>Status</DarkStyledTableCell>
                   <DarkStyledTableCell>Note</DarkStyledTableCell>
                 </TableRow>
@@ -62,10 +65,27 @@ const PartyDetails = () => {
                   partyBillsById.map((bill) => (
                     <StyledTableRow key={bill._id}>
                       <StyledTableCell>{new Date(bill.date).toLocaleDateString()}</StyledTableCell>
-                      <StyledTableCell>₹{bill.bill_amount}</StyledTableCell>
-                      <StyledTableCell>₹{bill.received_amount}</StyledTableCell>
                       <StyledTableCell>
-                        <Typography fontWeight="bold" color={bill.payment_status === "RECEIVED" ? "green" : "error"}>
+                        <Typography fontWeight="bold" color={primaryDarkColor}>
+                          ₹{bill.bill_amount}
+                        </Typography>
+                      </StyledTableCell>
+                      <StyledTableCell>
+                        <Typography fontWeight="bold" color={"green"}>
+                          ₹{bill.received_amount}
+                        </Typography>
+                      </StyledTableCell>
+                      <StyledTableCell>
+                        <Typography fontWeight="bold" color={"red"}>
+                          ₹{bill.bill_amount - bill.received_amount}
+                        </Typography>
+                      </StyledTableCell>
+
+                      <StyledTableCell>
+                        <AddPaymentModal label="Payments" partyId={id} bill={bill} />
+                      </StyledTableCell>
+                      <StyledTableCell>
+                        <Typography fontWeight="bold" color={bill.payment_status === "RECEIVED" ? "green" : "red"}>
                           {bill.payment_status}
                         </Typography>
                       </StyledTableCell>
