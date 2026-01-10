@@ -1,24 +1,90 @@
 import ErrorHandler from "../utils/errorHandler";
 import Party from "../models/party";
+import PartyTransactions from "../models/partyTransactions";
 import { StatusCodes } from "http-status-codes";
+import mongoose from "mongoose";
 
 const fetchParties = async (req, res, next) => {
   try {
     const { page, limit } = req.pagination;
     const search = req.query.search?.trim();
 
-    const query = search
+    const matchStage = search
       ? {
           $or: [{ name: { $regex: search, $options: "i" } }, { code: { $regex: search, $options: "i" } }],
         }
       : {};
 
-    const total = await Party.countDocuments(query);
+    const total = await Party.countDocuments(matchStage);
 
-    const parties = await Party.find(query)
-      .skip((page - 1) * limit)
-      .limit(limit)
-      .sort({ createdAt: -1 });
+    const parties = await Party.aggregate([
+      { $match: matchStage },
+
+      // 🔹 Lookup total transaction amount
+      {
+        $lookup: {
+          from: "partytransactions", // ✅ correct collection name
+          let: { partyId: "$_id" },
+          pipeline: [
+            {
+              $match: {
+                $expr: { $eq: ["$party_id", "$$partyId"] },
+              },
+            },
+            {
+              $group: {
+                _id: null,
+                totalAmount: { $sum: "$amount" },
+              },
+            },
+          ],
+          as: "transactions",
+        },
+      },
+
+      // 🔹 Lookup pending bills count
+      {
+        $lookup: {
+          from: "partybills", // ⚠️ collection name (important)
+          let: { partyId: "$_id" },
+          pipeline: [
+            {
+              $match: {
+                $expr: {
+                  $and: [{ $eq: ["$party_id", "$$partyId"] }, { $eq: ["$payment_status", "PENDING"] }],
+                },
+              },
+            },
+            { $count: "pendingBills" },
+          ],
+          as: "pendingBills",
+        },
+      },
+
+      // 🔹 Flatten lookup results
+      {
+        $addFields: {
+          totalAmount: {
+            $ifNull: [{ $arrayElemAt: ["$transactions.totalAmount", 0] }, 0],
+          },
+          pendingBillsCount: {
+            $ifNull: [{ $arrayElemAt: ["$pendingBills.pendingBills", 0] }, 0],
+          },
+        },
+      },
+
+      // 🔹 Cleanup
+      {
+        $project: {
+          transactions: 0,
+          pendingBills: 0,
+        },
+      },
+
+      { $sort: { createdAt: -1 } },
+      { $skip: (page - 1) * limit },
+      { $limit: limit },
+    ]);
 
     res.status(StatusCodes.OK).send({
       success: true,

@@ -10,6 +10,8 @@ import variantSlice from "./slices/variantSlice";
 import unitSlice from "./slices/unitSlice";
 import partySlice from "./slices/partySlice";
 import partyBillSlice from "./slices/partyBillSlice";
+import partyTransactionsSlice from "./slices/partyTransactionSlice";
+import partyPaymentSlice from "./slices/partyPaymentSlice";
 
 const persistConfig = {
   key: "root",
@@ -33,6 +35,8 @@ const rootReducer = combineReducers({
   units: unitSlice.reducer,
   parties: partySlice.reducer,
   partyBills: partyBillSlice.reducer,
+  partyTransactions: partyTransactionsSlice.reducer,
+  partyPayment: partyPaymentSlice.reducer,
 });
 
 const persistedReducer = persistReducer(persistConfig, rootReducer);
